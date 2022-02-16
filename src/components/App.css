@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html{
+    margin: 0;
+    padding: 0;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+.navBtn{
+    border-radius: 0 !important;
+    border-right: 2px solid #e6e6e6 !important;
+    margin: 0 !important;
+    /* padding: .5rem; */
+}
+/* .appbar{
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: min-content;
+} */
+.container{
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    margin: 3px 2%;
+}
+.header p{
+    margin: .2rem;
+    font-size: 1rem;
+}
+hr{
+    width: 96%;
+    border:2px solid lightblue;
+}
+.header img{
+    overflow: hidden;
+    border-radius: 50%;
+    width: 80px;
+    height: 100px;
+}
+/* .article{
+} */
+.articleHead{
+    margin: 0 10px;
+}
+.articleBody{
+    margin: 0 10px;
+    /* font-weight: 550; */
+    font-style: arial;
+}
+/* .articleBody img{
+    width: 50%;
+    position: relative;
+    left: 0;
+    margin: 5px 10px 0 0;
+    float: left;
+} */
+.articleBody img{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    margin: 5px 10px 0 0;
+    /* float: left; */
+}
+.info{
+    font-size: .9em;
+}
+
+/* .boi{
+    background-color: black;
+} */
+
+@media screen and (max-width: 992px) {
+
+}
+
+@media screen and (max-width: 600px){
+    .header img{
+        overflow: hidden;
+        border-radius: 50%;
+        width: 15%;
+    }
+    hr{
+        width: 90%;
+        border:2px solid lightblue;
+    }
+}
