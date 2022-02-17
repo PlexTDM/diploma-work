@@ -20,7 +20,7 @@ const Search = () => {
     {searchData && searchData.length!==0?
     searchData.map((data, i)=>{
       return <Button key={i} onMouseUp={()=>navigate('/article/'+data._id)} variant="text" className='h-min w-auto'>
-        {data.body}
+        {data.title}
       </Button>
     }):<div>No data</div>}
   </Paper>;

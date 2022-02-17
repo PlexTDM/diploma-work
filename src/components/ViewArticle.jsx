@@ -8,7 +8,7 @@ const One = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          const {data} = await axios.get('http://localhost:4000/'+id)
+          const {data} = await axios.get('http://localhost:4000/idsearch/'+id)
           setArticle(data.message[0].body)
           console.log(data);
         };
