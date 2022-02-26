@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { useTheme, Typography, IconButton } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 const Button = (props) => {
   const theme = useTheme();
   const [isHover, setIsHover] = useState(false);
-  const isSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
 
   return (
     <>
-      <IconButton color='primary' onMouseUp={props.onMouseUp}
+      <IconButton color='primary' onClick={props.onClick}
         className={`navBtn`}
         onMouseEnter={()=>setIsHover(true)}
         onMouseLeave={()=>setIsHover(false)}
@@ -19,7 +18,7 @@ const Button = (props) => {
       ]}
       >
         {props.children}
-        <Typography color="inherit" component="div" sx={{ fontSize: isSm?'2vw':'1.2vw'}}>
+        <Typography color="inherit" component="div" className='text-base'>
           {props.title}
         </Typography> 
       {/* <span ></span> */}

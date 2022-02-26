@@ -1,12 +1,17 @@
+import './App.css';
 import { useState } from 'react';
-import Nav from './Nav';
-import WriteArticles from './Articles';
-import ViewAritcle from './ViewArticle';
-import Search from './Search';
 import { Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepOrange, grey, blue } from '@mui/material/colors';
-import './App.css';
+import { Provider } from 'react-redux';
+import store from './store';
+import Nav from './Nav';
+import WriteArticles from './Articles';
+import ViewAritcle from './ViewArticle';
+import TypeSearch from './TypeSearch';
+import Search from './Search';
+import Login from './Auth/Login';
+import Register from './Auth/Register';
 
 const App = () => {
 
@@ -33,7 +38,7 @@ const App = () => {
             paper: '#fff',
           },
           text: {
-            primary: '#fff',
+            primary: '#000',
             secondary: grey[500],
           },
         }
@@ -58,13 +63,21 @@ const App = () => {
   return (
 
     <ThemeProvider theme={theme}>
+    <Provider store={store}>
       <Nav ToggleTheme={ToggleTheme}/>
       <Routes>
         {/* <Route path="/" element={<Articles />} /> */}
         <Route path="/write/" element={<WriteArticles />} />
         <Route path="/article/:id" element={<ViewAritcle />} />
-        <Route path="/search/:type" element={<Search />} />
+        <Route path="/type/:type" element={<TypeSearch />} />
+        <Route path="/search">
+          <Route path="/search/:q/:type" element={<Search/>} />
+          <Route path="/search/:q" element={<Search/>} />
+        </Route>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/register' element={<Register/>}/>
       </Routes>
+    </Provider>
     </ThemeProvider>
   )
 }
