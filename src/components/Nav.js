@@ -9,6 +9,7 @@ import logo from '../assets/logo.png';
 import darkLogo from '../assets/logo-dark.svg';
 import { useTheme } from '@mui/material/styles';
 import ThemeSwitch from './ThemeSwitch';
+import { useSelector } from 'react-redux';
 
 const Nav = (props) => {
   const theme = useTheme();
@@ -18,16 +19,19 @@ const Nav = (props) => {
   const isXs = useMediaQuery('(max-width:320px)');
   const [search, setSearch] = useState('');
 
+  const userData = useSelector(state => state.userData);
+  const { user } = userData;
+
   const toHome = () => {
     navigate('/');
   };
 
   const menuItems = [
-    {name: 'Мэдээ',color: '#ffd230',type:'news'},
-    {name: 'Улс Төр',color: '#589e50',type:'politics'},
-    {name: 'Спорт',color: '#589e50',type:'sport'},
-    {name: 'Эрүүл Мэнд',color: '#0068ff',type:'health'},
-    {name: 'Технологи',color: '#002856',type:'tech'},
+    { name: 'Мэдээ', color: '#ffd230', type: 'news' },
+    { name: 'Улс Төр', color: '#589e50', type: 'politics' },
+    { name: 'Спорт', color: '#589e50', type: 'sport' },
+    { name: 'Эрүүл Мэнд', color: '#0068ff', type: 'health' },
+    { name: 'Технологи', color: '#002856', type: 'tech' },
   ];
   let menuItemsCount = [];
   for (let i = 0; i < menuItems.length; i++) {
@@ -46,12 +50,12 @@ const Nav = (props) => {
 
   const handleMore = () => {
     if (isXs) {
-      
+
     }
   }
-  
-  const handleSearch = ()=>{
-    navigate('/search/'+search);
+
+  const handleSearch = () => {
+    navigate('/search/' + search);
   }
 
   return (
@@ -63,38 +67,44 @@ const Nav = (props) => {
             {<img src={theme.palette.mode === 'dark' ? logo : darkLogo} alt='logo' />}
           </NavButton>
 
-          <NavButton hoverColor='#1188bb' title={!isMd?'Sign In':''} onClick={()=>{navigate('/login')}}>
-            <UserIcon />
-          </NavButton>
+          {user && user ?
+            <NavButton hoverColor='#1188bb' title={!isMd ? 'Profile' : ''} onClick={() => { navigate('/profile') }}>
+              <UserIcon />
+            </NavButton> :
+            <NavButton hoverColor='#1188bb' title={!isMd ? 'Sign In' : ''} onClick={() => { navigate('/login') }}>
+              <UserIcon />
+            </NavButton>
+          }
+
 
           {menuItemsCount.map((val, i) => {
             return (
               <NavButton hoverColor={val.color} key={i} title={val.name} searchType={val.type}
-                onClick={() => {navigate('/type/'+val.type)}}
+                onClick={() => { navigate('/type/' + val.type) }}
               />
             )
           })}
 
-          <NavButton hoverColor='whitesmoke' onClick={handleMore} title='More'/>
+          <NavButton hoverColor='whitesmoke' onClick={handleMore} title='More' />
 
           <div className='mx-4 relative w-max !p-0'>
-            {!isSm ? <input type="text" placeholder="Search" className='search w-28 border-2 text-black pr-6' value={search} onChange={(e) => setSearch(e.target.value)} 
-            onKeyPress = {e => {
-              if (e.key !== 'Enter')return
-              handleSearch()
-            }}
+            {!isSm ? <input type="text" placeholder="Search" className='search w-28 border-2 text-black pr-6' value={search} onChange={(e) => setSearch(e.target.value)}
+              onKeyPress={e => {
+                if (e.key !== 'Enter') return
+                handleSearch()
+              }}
             /> : ''}
-            <IconButton style={{ color: `${!isSm ? '#000' : '#fff'}` }} className={`!p-0 !m-0 ${isSm?'':'!absolute right-0 !pt-[3px]'}`}
+            <IconButton style={{ color: `${!isSm ? '#000' : '#fff'}` }} className={`!p-0 !m-0 ${isSm ? '' : '!absolute right-0 !pt-[3px]'}`}
               onClick={handleSearch}
             >
-              <SearchIcon/>
+              <SearchIcon />
             </IconButton>
-            
+
           </div>
           {!isXs && <ThemeSwitch onMouseUp={props.ToggleTheme} />}
         </Toolbar>
       </AppBar>
-      <Divider/>
+      <Divider />
     </Paper>
   )
 }

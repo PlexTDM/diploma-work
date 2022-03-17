@@ -1,4 +1,4 @@
-import * as constants from '../constants/authConstants';
+import * as constants from '../constants/constants';
 
 const initial = {
     loading: false,
@@ -21,8 +21,11 @@ export const registerUsers = (state = initial, action) => {
             };
         case constants.REG_USERS_ERROR:
             return {
+                loading: false,
                 error: action.message
-            }
+            };
+        case constants.REG_RESET:
+            return state = initial;
         default: return state
     }
 }
@@ -43,8 +46,11 @@ export const loginUsers = (state = initial, action) => {
             };
         case constants.LOGIN_USERS_ERROR:
             return {
+                loading: false,
                 error: action.message
-            }
+            };
+        case constants.LOGIN_RESET:
+            return state = initial
         default: return state
     }
 }

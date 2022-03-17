@@ -10,9 +10,9 @@ const Search = () => {
     const fetchData = async () => {
       const { data } = await axios.get('http://localhost:4000/search?type=' + type)
       setSearchData(data.message)
-      console.log(data.message)
     };
     fetchData();
+    return ()=>setSearchData(null)
   }, [type]);
 
   return <ShowSearch data={searchData} />

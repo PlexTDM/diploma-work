@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import {registerUsers} from '../actions/authActions';
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Paper, InputAdornment } from '@mui/material'
 import {
   PersonOutlineOutlined as PersonIcon,
@@ -13,6 +13,8 @@ import Form from './Form';
 import blueskybg from '../../assets/blueskybg.jfif';
 import ErrAlert from "./ErrAlert";
 import Input from './Input';
+import LoadingCircle from '../LoadingCircle';
+import {REG_RESET} from '../constants/constants';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -23,9 +25,12 @@ const Register = () => {
 
   const dispatch = useDispatch();
   const registerFetch = useSelector(store => store.register);
-  // const { loading, data, error } = registerFetch;
-  const { data } = registerFetch;
+  const { loading, data, error, status } = registerFetch;
 
+  useEffect(() => {
+    error && setErrorOpen(true);
+  }, [error])
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -47,6 +52,10 @@ const Register = () => {
     setNumber('');
     setPassword('');
   };
+  
+  const closeErr = () => {
+    setErrorOpen(false)
+  }
 
   const bgstyle =  {
     backgroundImage: `url(${blueskybg})`,
@@ -58,19 +67,15 @@ const Register = () => {
     overflow: 'hidden',
   }
 
-  // const Input = props =>{
-  //   return(
-  //     <MuiInput {...props} className='text-base m-2'/>  
-  //   )
-  // }
-
+  data && status === 200 && dispatch({type: REG_RESET});
   data && console.log(data);
 
   return (
     <Paper sx={bgstyle} className='h-[89vh] w-full relative'>
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>
-          {errorOpen && <ErrAlert close={()=>{setErrorOpen(false)}}/>}
+          {errorOpen && <ErrAlert close={closeErr} value={error} />}
+          <LoadingCircle on={loading} />
           <Input
               onChange={(e) => setUsername(e.target.value)}
               value={username}

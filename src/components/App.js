@@ -3,21 +3,34 @@ import { useState } from 'react';
 import { Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepOrange, grey, blue } from '@mui/material/colors';
-import { Provider } from 'react-redux';
-import store from './store';
 import Nav from './Nav';
-import WriteArticles from './Articles';
+import TinyMCE from './TinyMCE';
 import ViewAritcle from './ViewArticle';
-import TypeSearch from './TypeSearch';
-import Search from './Search';
+import TypeSearch from './Search/TypeSearch';
+import Search from './Search/Search';
 import Login from './Auth/Login';
 import Register from './Auth/Register';
+import Profile from './Profile';
+import { getUserData } from './actions/userActions';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 const App = () => {
 
   const [mode, setMode] = useState('dark');
+  const dispatch = useDispatch();
+  const userData = useSelector(state => state.userData);
+  const { user } = userData;
 
-  const ToggleTheme = ()=>{
+
+  useEffect(() => {
+    if (user) return
+    if (!localStorage.getItem('user')) return
+    const localData = JSON.parse(localStorage.getItem('user'));
+    dispatch(getUserData(localData._id));
+  }, [user, dispatch]);
+
+  const ToggleTheme = () => {
     setMode(mode === 'light' ? 'dark' : 'light');
   }
 
@@ -41,12 +54,13 @@ const App = () => {
             primary: '#000',
             secondary: grey[500],
           },
+          // divider: grey[700],
         }
         : {
           primary: {
             main: '#fff',
           },
-          secondary:blue,
+          secondary: blue,
           divider: grey[700],
           background: {
             default: grey[900],
@@ -63,21 +77,21 @@ const App = () => {
   return (
 
     <ThemeProvider theme={theme}>
-    <Provider store={store}>
-      <Nav ToggleTheme={ToggleTheme}/>
+      <Nav ToggleTheme={ToggleTheme} />
       <Routes>
+        <Route path="/profile" element={<Profile />} />
         {/* <Route path="/" element={<Articles />} /> */}
-        <Route path="/write/" element={<WriteArticles />} />
+        <Route path="/write/" element={<TinyMCE />} />
+        <Route path="/update/:id" element={<TinyMCE update/>} />
         <Route path="/article/:id" element={<ViewAritcle />} />
         <Route path="/type/:type" element={<TypeSearch />} />
         <Route path="/search">
-          <Route path="/search/:q/:type" element={<Search/>} />
-          <Route path="/search/:q" element={<Search/>} />
+          <Route path="/search/:q/:type" element={<Search />} />
+          <Route path="/search/:q" element={<Search />} />
         </Route>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/register' element={<Register/>}/>
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
-    </Provider>
     </ThemeProvider>
   )
 }

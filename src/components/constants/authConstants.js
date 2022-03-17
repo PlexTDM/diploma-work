@@ -1,6 +1,0 @@
-export const REG_USERS_REQ = "REG_USERS_REQ";
-export const REG_USERS_RES = "REG_USERS_RES";
-export const REG_USERS_ERROR = "REG_USERS_ERROR";
-export const LOGIN_USERS_REQ = "LOGIN_USERS_REQ";
-export const LOGIN_USERS_RES = "LOGIN_USERS_RES";
-export const LOGIN_USERS_ERROR = "LOGIN_USERS_ERROR";

@@ -6,8 +6,10 @@ import { Button, Paper, InputAdornment } from '@mui/material'
 import { Mail as MailIcon, Password as PasswordIcon } from '@mui/icons-material';
 import Form from './Form';
 import Input from './Input';
+import LoadingCircle from '../LoadingCircle';
 import blueskybg from '../../assets/blueskybg.jfif';
 import ErrAlert from './ErrAlert';
+import { LOGIN_RESET } from '../constants/constants';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,37 +24,29 @@ const Login = () => {
   // login === 2 ? 'redirected'
 
   const loginFetch = useSelector(state => state.login);
-  const { data, status } = loginFetch;
-  // const { loading, data, error } = loginFetch;
+  const { data, status, error, loading } = loginFetch;
 
   useEffect(() => {
-    const getUserFromLocalStorage = () => {
-      const localData = {
-        _id: data._id,
-        avatar: data.avatar,
-        role: data.role,
-      }
-      localStorage.setItem('user', JSON.stringify(localData));
-    }
     const ehe = async () => {
       await setLogin(2);
-      getUserFromLocalStorage();
+      localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/home');
+      dispatch({type: LOGIN_RESET});
     }
 
     if (login === 1) {
       ehe();
     }
-    console.log(login);
+    error && setErrorOpen(true);
 
-  }, [login, navigate, data]);
+  }, [login, navigate, data, error, dispatch]);
 
 
   const submitHandler = async (e) => {
-    setLogin(0);
     e.preventDefault();
     if (email.trim() === '' || password.trim() === '') {
-      return setErrorOpen(true);
+      setErrorOpen(true);
+      return
     };
     const formData = {
       email: email,
@@ -60,11 +54,15 @@ const Login = () => {
     }
     dispatch(loginUsers(formData));
     resetForm();
+    setLogin(0);
   };
   const resetForm = () => {
     setEmail('');
     setPassword('');
   };
+  const closeErr = () => {
+    setErrorOpen(false)
+  }
 
   const bgstyle = {
     backgroundImage: `url(${blueskybg})`,
@@ -77,12 +75,13 @@ const Login = () => {
   }
 
   data && console.log(data);
-  status && status === 200 && login === 0 && setLogin(1)
+  status && status === 200 && login === 0 && setLogin(1);
   return (
     <Paper sx={bgstyle} className='h-[89vh] w-full relative'>
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>
-          {errorOpen && <ErrAlert close={() => { setErrorOpen(false) }} />}
+          {errorOpen && <ErrAlert close={closeErr} value={error} />}
+          {loading && <LoadingCircle />}
           <Input
             onChange={(e) => setEmail(e.target.value)}
             value={email}

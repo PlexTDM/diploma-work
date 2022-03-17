@@ -14,6 +14,10 @@ body{
             Segoe UI Symbol, Noto Color Emoji; */
 }
 
+table, th, td {
+    border: 1px solid gray;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
@@ -73,38 +77,7 @@ hr{
     /* font-weight: 550; */
     font-style: arial;
 }
-/* .articleBody img{
-    width: 50%;
-    position: relative;
-    left: 0;
-    margin: 5px 10px 0 0;
-    float: left;
-} */
-/* .articleBody img{
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    margin: 5px 10px 0 0;
-    float: left;
-} */
 
-/* .boi{
-    background-color: black;
-} */
-
-@media screen and (max-width: 992px) {
-
-}
-
-@media screen and (max-width: 600px){
-    /* .header img{
-        overflow: hidden;
-        border-radius: 50%;
-        width: 15%;
-    }
-    hr{
-        width: 90%;
-        border:2px solid lightblue;
-    } */
+.MuiTabs-indicator{
+    background-color: #01b9f5 !important;
 }
