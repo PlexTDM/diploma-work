@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { CLEAR_USER_ARTICLES, GET_USERS_RESET } from '../constants/constants';
 import { AppBar, Tab, Tabs, Box, IconButton } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useSelector, useDispatch } from 'react-redux';
-import { getUserArticle } from './actions/userActions';
-import { CLEAR_USER_ARTICLES } from './constants/constants';
-import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { getUserArticle } from '../actions/userActions';
+import { useSelector, useDispatch } from 'react-redux';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { useState, useEffect } from 'react';
+import AdminControl from './AdminControl';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const TabPanel = (props) => {
@@ -22,7 +23,7 @@ const TabPanel = (props) => {
   );
 }
 
-const FullWidthTabs = (props) => {
+const FullWidthTabs = props => {
   const swal = withReactContent(Swal);
   const { data } = useSelector(state => state.userArticles);
 
@@ -33,12 +34,13 @@ const FullWidthTabs = (props) => {
   useEffect(() => {
     return () => {
       dispatch({ type: CLEAR_USER_ARTICLES });
+      dispatch({ type: GET_USERS_RESET });
     }
   }, [dispatch])
 
 
-  const handleChange = (e, newValue) => {
-    setValue(newValue);
+  const handleChange = (e, val) => {
+    setValue(val);
   };
 
   const handleDelete = id => {
@@ -64,9 +66,7 @@ const FullWidthTabs = (props) => {
         try {
           await axios.delete(api + '/delete/' + id, options)
           console.log('deleted')
-          // dispatch(getUserArticle(id));
         } catch (error) {
-          console.log(error);
           swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -89,7 +89,9 @@ const FullWidthTabs = (props) => {
           // variant="scrollable"
           scrollButtons="auto">
           <Tab label="Articles" />
-          <Tab label="Admin Control" />
+          {props.user && props.user.role === 'admin' &&
+            <Tab label="Admin Control" />
+          }
           <Tab label="Item Three" />
         </Tabs>
       </AppBar>
@@ -102,9 +104,9 @@ const FullWidthTabs = (props) => {
           </div>
         </div>) : props.user && dispatch(getUserArticle(props.user._id)) && 'Loading'}
       </TabPanel>
-      { props.user && 
+      {props.user && props.user.role === 'admin' &&
         <TabPanel value={value} index={1}>
-          Item Two
+          <AdminControl />
         </TabPanel>
       }
 

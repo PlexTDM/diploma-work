@@ -55,14 +55,19 @@ const TinyMCE = props => {
       const access_token = userlocal.access_token;
       const options = { headers: { 'Authorization': 'Bearer ' + access_token } };
       if (update) {
-        setLoading(true);
-        await axios.put(apiUri + '/update/' + id, {
-          title: title,
-          type: type,
-          body: editorContent
-        }, options)
-        setLoading(false);
-        swal.fire('Амжилттай засагдлаа', '', 'success')
+        try {
+          setLoading(true);
+          await axios.put(apiUri + '/update/' + id, {
+            title: title,
+            type: type,
+            body: editorContent
+          }, options)
+          setLoading(false);
+          swal.fire('Амжилттай засагдлаа', '', 'success')
+        } catch(err){
+          setLoading(false);
+          swal.fire('Алдаа гарлаа', '', 'error')
+        }
       } else {
         await axios.post(apiUri, {
           title: title,

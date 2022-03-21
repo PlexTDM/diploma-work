@@ -54,3 +54,28 @@ export const loginUsers = (state = initial, action) => {
         default: return state
     }
 }
+
+export const updateUsers = (state = initial, action) => {
+    switch (action.type) {
+        case constants.UPDATE_USERS_REQ:
+            return {
+                loading: true
+            }
+        case constants.UPDATE_USERS_RES:
+            return {
+                loading: false,
+                status: action.status,
+                data: action.payload,
+            }
+        case constants.UPDATE_USERS_ERROR:
+            return {
+                loading: false,
+                error: action.message,
+                status: action.status,
+            }
+        case constants.UPDATE_USERS_RESET:
+            return state = initial
+        default:
+            return state
+    }
+}

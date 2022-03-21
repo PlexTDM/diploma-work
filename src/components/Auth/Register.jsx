@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import {registerUsers} from '../actions/authActions';
+import { registerUsers } from '../actions/authActions';
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button, Paper, InputAdornment } from '@mui/material'
@@ -14,7 +14,7 @@ import blueskybg from '../../assets/blueskybg.jfif';
 import ErrAlert from "./ErrAlert";
 import Input from './Input';
 import LoadingCircle from '../LoadingCircle';
-import {REG_RESET} from '../constants/constants';
+import { REG_RESET } from '../constants/constants';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -30,12 +30,12 @@ const Register = () => {
   useEffect(() => {
     error && setErrorOpen(true);
   }, [error])
-  
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
     if (email.trim() === '' || password.trim() === '' || username.trim() === '' || number.trim() === '') {
-        return setErrorOpen(true);
+      return setErrorOpen(true);
     };
     const formData = {
       email: email,
@@ -52,12 +52,12 @@ const Register = () => {
     setNumber('');
     setPassword('');
   };
-  
+
   const closeErr = () => {
     setErrorOpen(false)
   }
 
-  const bgstyle =  {
+  const bgstyle = {
     backgroundImage: `url(${blueskybg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -67,61 +67,61 @@ const Register = () => {
     overflow: 'hidden',
   }
 
-  data && status === 200 && dispatch({type: REG_RESET});
+  data && status === 200 && dispatch({ type: REG_RESET });
   data && console.log(data);
 
   return (
     <Paper sx={bgstyle} className='h-[89vh] w-full relative'>
+      {loading && <LoadingCircle />}
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>
           {errorOpen && <ErrAlert close={closeErr} value={error} />}
-          <LoadingCircle on={loading} />
           <Input
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-              id="username"
-              placeholder="Username"
-              startAdornment={
-                <InputAdornment position="start">
-                  <PersonIcon />
-                </InputAdornment>
-              }
-            />
-            <Input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              id="email"
-              placeholder="Цахим Шуудан"
-              startAdornment={
-                <InputAdornment position="start">
-                  <MailIcon />
-                </InputAdornment>
-              }
-            />
-            <Input
-              onChange={(e) => setNumber(e.target.value)}
-              value={number}
-              id="number"
-              placeholder="Phone Number"
-              type="number"
-              startAdornment={
-                <InputAdornment position="start">
-                  <PhoneIcon />
-                </InputAdornment>
-              }
-            />
-            <Input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              id="password"
-              placeholder="Нууц Үг"
-              type="password"
-              startAdornment={
-                <InputAdornment position="start">
-                  <PasswordIcon />
-                </InputAdornment>
-              }
-            />
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            id="username"
+            placeholder="Username"
+            startAdornment={
+              <InputAdornment position="start">
+                <PersonIcon />
+              </InputAdornment>
+            }
+          />
+          <Input
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            id="email"
+            placeholder="Цахим Шуудан"
+            startAdornment={
+              <InputAdornment position="start">
+                <MailIcon />
+              </InputAdornment>
+            }
+          />
+          <Input
+            onChange={(e) => setNumber(e.target.value)}
+            value={number}
+            id="number"
+            placeholder="Phone Number"
+            type="number"
+            startAdornment={
+              <InputAdornment position="start">
+                <PhoneIcon />
+              </InputAdornment>
+            }
+          />
+          <Input
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            id="password"
+            placeholder="Нууц Үг"
+            type="password"
+            startAdornment={
+              <InputAdornment position="start">
+                <PasswordIcon />
+              </InputAdornment>
+            }
+          />
           <Button variant="contained" type="submit">Бүртгүүлэх</Button>
           <Link to="/login" style={{ width: 'min-content', borderBottom: '1px solid green' }}>Нэвтрэх</Link>
         </Form>

@@ -15,7 +15,6 @@ export const getUserData = userId => async dispatch => {
             //     // return status >= 200 && status < 300; 
             // },
         });
-        console.log(response.data);
         dispatch({
             type: constants.GET_USER_DATA,
             status: response.status,
@@ -28,6 +27,7 @@ export const getUserData = userId => async dispatch => {
                 message: error.message,
                 status: undefined
             })
+            return
         }
         dispatch({
             type: constants.GET_USER_ERROR,
@@ -47,7 +47,6 @@ export const getUserArticle = userId => async dispatch => {
                 'Authorization': 'Bearer ' + access_token
             }
         });
-        console.log(response.data.message);
         dispatch({
             type: constants.GET_USER_ARTICLES,
             payload: response.data.message
@@ -59,9 +58,43 @@ export const getUserArticle = userId => async dispatch => {
                 message: error.message,
                 status: undefined
             })
+            return
         }
         dispatch({
             type: constants.GET_USER_ARTICLES_ERROR,
+            message: error.message,
+            status: error.response.status
+        })
+    }
+}
+
+export const getUsers = page => async dispatch => {
+    const skips = page * 5
+    try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const access_token = user.access_token;
+        dispatch({type: constants.GET_USERS_REQ})
+        const response = await axios.get(uri + '/getUsers/' + skips, {
+            headers: {
+                'Authorization': 'Bearer ' + access_token
+            }
+        });
+        dispatch({
+            type: constants.GET_USERS_RES,
+            payload: response.data,
+            status: response.status,
+        })
+    } catch (error) {
+        if (!error.response) {
+            dispatch({
+                type: constants.GET_USERS_ERROR,
+                message: error.message,
+                status: undefined
+            })
+            return
+        }
+        dispatch({
+            type: constants.GET_USERS_ERROR,
             message: error.message,
             status: error.response.status
         })

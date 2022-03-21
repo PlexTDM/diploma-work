@@ -10,7 +10,7 @@ import TypeSearch from './Search/TypeSearch';
 import Search from './Search/Search';
 import Login from './Auth/Login';
 import Register from './Auth/Register';
-import Profile from './Profile';
+import Profile from './Profile/Profile';
 import { getUserData } from './actions/userActions';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
