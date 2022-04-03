@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { Avatar, Stack, CircularProgress, Pagination, Dialog, TextField, Button, MenuItem } from '@mui/material';
-import { getUsers } from '../actions/userActions';
 import { GET_USERS_RESET } from '../constants/constants';
-import { updateUsers } from '../actions/authActions';
-import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUsers } from '../actions/authActions';
+import { getUsers } from '../actions/userActions';
+import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 const Modal = props => {
   const { open, close, user } = props;
@@ -52,8 +52,6 @@ const Modal = props => {
       className='flex justify-center items-center !z-[5]'>
       <Stack sx={{ bgcolor: '#424242', minWidth: '50%', p: 4 }} direction='row'>
         {loading && <CircularProgress />}
-        {error && console.log(error)}
-        {data && console.log(data)}
         <Stack direction='column' spacing={2}>
           <Avatar src={avatar} sx={{ width: 256, height: 256 }} />
           <Button variant="contained" component="label">Upload File
