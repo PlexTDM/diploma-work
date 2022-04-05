@@ -29,7 +29,13 @@ const Register = () => {
 
   useEffect(() => {
     error && setErrorOpen(true);
-  }, [error])
+  }, [error]);
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: REG_RESET });
+    };
+  }, [dispatch]);
 
 
   const submitHandler = async (e) => {
@@ -79,7 +85,7 @@ const Register = () => {
           <Input
             onChange={(e) => setUsername(e.target.value)}
             value={username}
-            id="username"
+            autoComplete="username"
             placeholder="Username"
             startAdornment={
               <InputAdornment position="start">
@@ -90,7 +96,7 @@ const Register = () => {
           <Input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            id="email"
+            autoComplete="email"
             placeholder="Цахим Шуудан"
             startAdornment={
               <InputAdornment position="start">
@@ -101,7 +107,7 @@ const Register = () => {
           <Input
             onChange={(e) => setNumber(e.target.value)}
             value={number}
-            id="number"
+            autoComplete="number"
             placeholder="Phone Number"
             type="number"
             startAdornment={
@@ -113,7 +119,7 @@ const Register = () => {
           <Input
             onChange={(e) => setPassword(e.target.value)}
             value={password}
-            id="password"
+            autoComplete="new-password"
             placeholder="Нууц Үг"
             type="password"
             startAdornment={

@@ -1,91 +1,71 @@
-import * as constants from '../constants/constants';
-import axios from 'axios';
+import * as constants from "../constants/constants";
+import axios from "axios";
 
-const uri = 'http://localhost:4000';
+const uri = "http://localhost:4000";
 
-export const registerUsers = formData => async dispatch => {
-    try {
-        dispatch({
-            type: constants.REG_USERS_REQ
-        })
-        const response = await axios.post(uri + '/register', formData);
+export const registerUsers = (formData) => async (dispatch) => {
+    dispatch({
+      type: constants.REG_USERS_REQ,
+    });
+    await axios.post(uri + "/register", formData)
+    .then(res => {
         dispatch({
             type: constants.REG_USERS_RES,
-            status: response.status,
-            payload: response.data
-        })
-    } catch (error) {
-        if (!error.response) {
-            dispatch({
-                type: constants.GET_USER_ERROR,
-                message: error.message,
-                status: undefined
-            })
-        }
-        dispatch({
-            type: constants.GET_USER_ERROR,
-            message: error.message,
-            status: error.response.status
-        })
-    }
-}
-
-export const loginUsers = formData => async dispatch => {
-    try {
-        dispatch({
-            type: constants.LOGIN_USERS_REQ
-        })
-        const response = await axios.post(uri + '/login', formData);
-        dispatch({
-            type: constants.LOGIN_USERS_RES,
-            status: response.status,
-            payload: response.data,
-        })
-    } catch (error) {
-        if (!error.response) {
-            dispatch({
-                type: constants.LOGIN_USERS_ERROR,
-                message: error.message,
-                status: undefined
-            })
-        }
-        dispatch({
-            type: constants.LOGIN_USERS_ERROR,
-            message: error.message,
-            status: error.response.status
-        })
-    }
-}
-
-export const updateUsers = (_id,formData) => async dispatch => {
-    try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const access_token = user.access_token;
-        dispatch({
-            type: constants.UPDATE_USERS_REQ
-        })
-        const response = await axios.put(uri + '/updateUser/'+_id, formData,{
-            headers: {
-                'Authorization': 'Bearer ' + access_token
-            }
+            payload: res.data,
+            status: res.status,
         });
+    }).catch(err => {
+        dispatch({
+            type: constants.REG_USERS_ERROR,
+            message: err.message,
+        });
+    })
+};
+
+export const loginUsers = (formData) => async (dispatch) => {
+  dispatch({
+    type: constants.LOGIN_USERS_REQ,
+  });
+  await axios.post(uri + "/login", formData)
+    .then((res) => {
+      dispatch({
+        type: constants.LOGIN_USERS_RES,
+        status: res.status,
+        payload: res.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: constants.LOGIN_USERS_ERROR,
+        message: error.message,
+        status: error.response.status,
+      });
+    });
+};
+
+export const updateUsers = (_id, formData) => async (dispatch) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const access_token = user.access_token;
+    dispatch({
+      type: constants.UPDATE_USERS_REQ,
+    });
+    await axios.put(uri + "/updateUser/" + _id, formData, {
+      headers: {
+        Authorization: "Bearer " + access_token,
+      },
+    }).then(res=>{
         dispatch({
             type: constants.UPDATE_USERS_RES,
-            status: response.status,
-            payload: response.data,
-        })
-    } catch (error) {
-        if (!error.response) {
-            dispatch({
-                type: constants.UPDATE_USERS_ERROR,
-                message: error.message,
-                status: undefined
-            })
-        }
+            payload: res.data,
+            status: res.status,
+        });
+
+    }).catch(err=>{
         dispatch({
             type: constants.UPDATE_USERS_ERROR,
-            message: error.message,
-            status: error.response.status
-        })
-    }
-}
+            message: err.message,
+            status: err.response.status,
+        });
+
+    })
+};

@@ -16,6 +16,14 @@ export const userData = (state = {user:null}, action) => {
                 status: action.status,
                 message: action.message
             }
+        case constants.CLEAR_USER_DATA:
+            localStorage.removeItem('user');
+            return {
+                user: null,
+                data: null,
+                status: null,
+                message: null
+            }
         default: return state
     }
 }

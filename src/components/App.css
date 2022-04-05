@@ -81,3 +81,11 @@ hr{
 .MuiTabs-indicator{
     background-color: #01b9f5 !important;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}

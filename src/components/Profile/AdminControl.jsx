@@ -17,7 +17,7 @@ const Modal = props => {
   const [role, setRole] = useState(user.role);
   const dispatch = useDispatch();
   const response = useSelector(state => state.updateUsers);
-  const { loading, error, data } = response;
+  const { loading } = response;
 
   const swal = withReactContent(Swal)
 
@@ -40,7 +40,7 @@ const Modal = props => {
       username: username,
       email: email,
       number: number,
-      password: password,
+      password: password || user.password,
       avatar: avatar,
       role: role
     }
@@ -93,7 +93,6 @@ const Admin = () => {
   const center = 'flex items-center ';
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(0);
-  const counts = count
   const handlePage = (e, val) => {
     dispatch({ type: GET_USERS_RESET });
     dispatch(getUsers(val - 1));
@@ -126,7 +125,7 @@ const Admin = () => {
         )
       })}
 
-      <Pagination count={counts} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
+      <Pagination count={Math.ceil(count/5)} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
     </Stack>
   )
 

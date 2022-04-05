@@ -18,7 +18,7 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState([false],null);
 
   const loginFetch = useSelector(state => state.login);
   const { data, error, loading } = loginFetch;
@@ -33,19 +33,20 @@ const Login = () => {
     if (data) {
       ehe();
     }
-    error && setErrorOpen(true);
-
+    error&&setErrorOpen([true, error]);
+  }, [navigate, data, error, dispatch]);
+  useEffect(() => {
+    
     return ()=>{
       dispatch({type: LOGIN_RESET});
     }
-
-  }, [navigate, data, error, dispatch]);
+  }, [dispatch]);
 
 
   const submitHandler = async (e) => {
     e.preventDefault();
     if (email.trim() === '' || password.trim() === '') {
-      setErrorOpen(true);
+      setErrorOpen([true,null]);
       return
     };
     const formData = {
@@ -60,7 +61,7 @@ const Login = () => {
     setPassword('');
   };
   const closeErr = () => {
-    setErrorOpen(false)
+    setErrorOpen([false,null]);
   }
 
   const bgstyle = {
@@ -77,11 +78,11 @@ const Login = () => {
       {loading && <LoadingCircle />}
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>
-          {errorOpen && <ErrAlert close={closeErr} value={error} />}
+          {errorOpen[0] && <ErrAlert close={closeErr} message={errorOpen[1]} />}
           <Input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
-            id="email"
+            autoComplete="email"
             placeholder="Цахим Шуудан"
             startAdornment={
               <InputAdornment position="start">
@@ -92,6 +93,7 @@ const Login = () => {
           <Input
             onChange={(e) => setPassword(e.target.value)}
             value={password} placeholder="Нууц Үг" type="password"
+            autoComplete="current-password"
             className='my-4'
             startAdornment={
               <InputAdornment position="start">

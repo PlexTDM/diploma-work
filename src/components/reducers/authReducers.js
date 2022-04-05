@@ -47,7 +47,7 @@ export const loginUsers = (state = initial, action) => {
         case constants.LOGIN_USERS_ERROR:
             return {
                 loading: false,
-                error: action.message
+                error: action.message,
             };
         case constants.LOGIN_RESET:
             return state = initial
