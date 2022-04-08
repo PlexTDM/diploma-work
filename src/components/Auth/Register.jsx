@@ -77,7 +77,7 @@ const Register = () => {
   data && console.log(data);
 
   return (
-    <Paper sx={bgstyle} className='h-[89vh] w-full relative'>
+    <Paper sx={bgstyle} className='h-[calc(100vh_-_68px)] w-full relative'>
       {loading && <LoadingCircle />}
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>

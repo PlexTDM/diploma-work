@@ -3,11 +3,12 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { loginUsers, registerUsers, updateUsers } from './reducers/authReducers';
-import { userData, userArticle, getUsers } from './reducers/userData';
+import { userData, userArticle, getUsers, homePageData } from './reducers/userData';
 
 const reducers = combineReducers({
     register: registerUsers,
     login: loginUsers,
+    homePage: homePageData,
     userData: userData,
     userArticles: userArticle,
     getUsers: getUsers,

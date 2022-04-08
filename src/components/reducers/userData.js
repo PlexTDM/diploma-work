@@ -9,7 +9,7 @@ export const userData = (state = {user:null}, action) => {
                 user: action.payload.user,
                 status: action.status
             }
-        case constants.GET_USER_ERROR:
+        case constants.GET_USER_DATA_ERROR:
             return {
                 ...state,
                 user: null,
@@ -57,7 +57,7 @@ export const getUsers = (state = {users:null}, action) => {
             }
         case constants.GET_USERS_RES:
             return {
-                users: action.payload.message,
+                users: action.payload,
                 count: action.payload.count,
                 loading: false,
             }
@@ -72,6 +72,31 @@ export const getUsers = (state = {users:null}, action) => {
             }
         case constants.GET_USERS_RESET:
             return state = {data:null}
+        default: return state
+    }
+}
+
+export const homePageData = (state = {data:null}, action)=>{
+    switch (action.type) {
+        case constants.GET_HOME_PAGE_REQ:
+            return {
+                ...state,
+                loading: true,
+            }
+        case constants.GET_HOME_PAGE_RES:
+            return {
+                ...state,
+                data: action.payload,
+                loading: false,
+            }
+        case constants.GET_HOME_PAGE_ERROR:
+            return {
+                ...state,
+                data: null,
+                loading: false,
+                status: action.status??null,
+                error: action.message,
+            }
         default: return state
     }
 }

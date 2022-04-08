@@ -4,31 +4,29 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.4.1",
-    "@mui/material": "^5.4.1",
-    "@mui/styled-engine-sc": "^5.4.1",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.0",
+    "@mui/material": "^5.6.0",
+    "@mui/styled-engine-sc": "^5.5.2",
     "@redux-devtools/extension": "^3.2.2",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@tinymce/tinymce-react": "^3.13.0",
-    "axios": "^0.26.0",
-    "dotenv": "^14.2.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.6",
-    "react-router-dom": "^6.2.1",
+    "@tinymce/tinymce-react": "^3.14.0",
+    "axios": "^0.26.1",
+    "dotenv": "^16.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^7.2.8",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "react-share": "^4.4.0",
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
-    "styled-components": "^5.3.3",
-    "sweetalert2": "^11.4.4",
+    "styled-components": "^5.3.5",
+    "sweetalert2": "^11.4.8",
     "sweetalert2-react-content": "^4.2.0",
-    "tinymce": "^5.10.3"
+    "tinymce": "^6.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -55,8 +53,10 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.6",
-    "tailwindcss": "^3.0.22"
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/user-event": "^14.0.4",
+    "autoprefixer": "^10.4.4",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.23"
   }
 }

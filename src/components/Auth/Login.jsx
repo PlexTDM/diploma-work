@@ -24,14 +24,11 @@ const Login = () => {
   const { data, error, loading } = loginFetch;
 
   useEffect(() => {
-    const ehe = async () => {
-      localStorage.setItem('user', JSON.stringify(data.user));
-      dispatch(getUserData(data.user._id));
-      navigate('/home');
-    }
 
     if (data) {
-      ehe();
+      localStorage.setItem('user', JSON.stringify(data));
+      dispatch(getUserData(data._id));
+      navigate('/home');
     }
     error&&setErrorOpen([true, error]);
   }, [navigate, data, error, dispatch]);
@@ -74,7 +71,7 @@ const Login = () => {
     overflow: 'hidden',
   }
   return (
-    <Paper sx={bgstyle} className='h-[89vh] w-full relative'>
+    <Paper sx={bgstyle} className='h-[calc(100vh_-_68px)] w-full relative'>
       {loading && <LoadingCircle />}
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>

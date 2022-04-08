@@ -23,7 +23,7 @@ const Nav = (props) => {
   const { user } = userData;
 
   const toHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   const menuItems = [

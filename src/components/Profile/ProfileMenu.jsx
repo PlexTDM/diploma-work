@@ -1,22 +1,10 @@
 import { CLEAR_USER_ARTICLES, GET_USERS_RESET } from "../constants/constants";
-import {
-  AppBar,
-  Avatar,
-  Tab,
-  Tabs,
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Stack,
-  CircularProgress,
-  FormControlLabel,
-  FormGroup,
-} from "@mui/material";
+import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup } from "@mui/material";
 import withReactContent from "sweetalert2-react-content";
-import { getUserArticle } from "../actions/userActions";
+import { getUserArticle, getUserData } from "../actions/userActions";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUsers } from "../actions/authActions";
+import ReplayIcon from '@mui/icons-material/Replay';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState, useEffect } from "react";
@@ -41,18 +29,6 @@ const FullWidthTabs = (props) => {
   const updateDatas = useSelector((state) => state.updateUsers);
   const { loading: updateLoading, data: updateData } = updateDatas;
 
-  useEffect(() => {
-    if (!user) return navigate("/login");
-  }, [user, navigate]);
-
-  useEffect(() => {
-    dispatch(getUserArticle(props.user._id));
-    return () => {
-      dispatch({ type: CLEAR_USER_ARTICLES });
-      dispatch({ type: GET_USERS_RESET });
-    };
-  }, [dispatch, props]);
-
   const [value, setValue] = useState(0);
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
@@ -62,6 +38,20 @@ const FullWidthTabs = (props) => {
   const [comfirmPassword, setComfirmPassword] = useState("");
   const [avatar, setAvatar] = useState(user.avatar);
   const api = "http://localhost:4000";
+  const [people, setPeople] = useState(data);
+
+  useEffect(() => {
+    if (!user) return navigate("/login");
+    data??dispatch(getUserArticle(props.user._id));
+    setPeople(data);
+  }, [user, navigate, data, dispatch, props]);
+
+  useEffect(() => {
+    return () => {
+      dispatch({ type: CLEAR_USER_ARTICLES });
+      dispatch({ type: GET_USERS_RESET });
+    };
+  }, [dispatch, props]);
 
   const handleChange = (e, val) => {
     setValue(val);
@@ -78,17 +68,19 @@ const FullWidthTabs = (props) => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  const refreshUsers = () => dispatch(getUserArticle(props.user._id))
+
   const handleUpdate = () => {
     let pass;
-    if(updatePass){
-      if(password !== comfirmPassword){
+    if (updatePass) {
+      if (password !== comfirmPassword) {
         swal.fire({
           title: "Password not match",
           icon: "error",
         });
       }
       pass = password;
-    }else{
+    } else {
       pass = user.password;
     }
     const formData = {
@@ -106,10 +98,11 @@ const FullWidthTabs = (props) => {
         title: "updated",
         text: updateData.message,
         icon: "success",
-      });
+      }) && dispatch(getUserData(user._id));
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
+    console.log(user)
     swal
       .fire({
         title: "Are you sure?",
@@ -124,10 +117,8 @@ const FullWidthTabs = (props) => {
       .then(async (result) => {
         if (result.value) {
           swal.fire("Устгагдлаа!", "Таны Нийтлэл Устгагдлаа!", "success");
-          const userlocal = JSON.parse(localStorage.getItem("user"));
-          const access_token = userlocal.access_token;
           const options = {
-            headers: { Authorization: "Bearer " + access_token },
+            headers: { Authorization: "Bearer " + user.access_token },
           };
           try {
             await axios.delete(api + "/delete/" + id, options);
@@ -253,27 +244,30 @@ const FullWidthTabs = (props) => {
       )}
 
       <TabPanel value={value} index={2}>
-        {data && data.length !== 0 ? (
-          data.map((item) => (
-            <div key={item._id} className="flex flex-row relative m-2">
-              <Link className="max-w-[75%]" to={"/article/" + item._id}>
-                {item.title}
-              </Link>
-              <div className="flex flex-row absolute right-0">
-                <Link to={"/update/" + item._id}>
-                  <IconButton>
-                    <EditIcon />
-                  </IconButton>
+        <div className="relative">
+          <IconButton className='!absolute top-[-20px] right-[-15px]' onClick={refreshUsers}><ReplayIcon /></IconButton>
+          {people && people.length !== 0 ? (
+            people.map(item => (
+              <div key={item._id} className="flex flex-row relative m-2">
+                <Link className="max-w-[75%]" to={"/article/" + item._id}>
+                  {item.title}
                 </Link>
-                <IconButton onClick={() => handleDelete(item._id)}>
-                  <DeleteIcon />
-                </IconButton>
+                <div className="flex flex-row absolute right-0">
+                  <Link to={"/update/" + item._id}>
+                    <IconButton>
+                      <EditIcon />
+                    </IconButton>
+                  </Link>
+                  <IconButton onClick={() => handleDelete(item._id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div>No Articles</div>
-        )}
+            ))
+          ) : (
+            <div>No Articles</div>
+          )}
+        </div>
       </TabPanel>
     </Box>
   );

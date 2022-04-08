@@ -14,6 +14,7 @@ import Profile from "./Profile/Profile";
 import { getUserData } from "./actions/userActions";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import HomePage from "./HomePage";
 
 const App = () => {
   const [mode, setMode] = useState("dark");
@@ -23,9 +24,10 @@ const App = () => {
 
   useEffect(() => {
     if (user) return;
-    if (!localStorage.getItem("user")) return;
-    const localData = JSON.parse(localStorage.getItem("user"));
-    dispatch(getUserData(localData._id));
+    let localdata = localStorage.getItem("user");
+    if (!localdata) return;
+    localdata = JSON.parse(localdata);
+    dispatch(getUserData(localdata._id));
   }, [user, dispatch]);
 
   const ToggleTheme = () => {
@@ -52,7 +54,6 @@ const App = () => {
               primary: "#000",
               secondary: grey[500],
             },
-            // divider: grey[700],
           }
         : {
             primary: {
@@ -76,9 +77,9 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Nav ToggleTheme={ToggleTheme} />
       <Routes>
+        <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<Profile />} />
-        {/* <Route path="/" element={<Articles />} /> */}
-        <Route path="/write/" element={<TinyMCE />} />
+        <Route path="/write" element={<TinyMCE />} />
         <Route path="/update/:id" element={<TinyMCE update />} />
         <Route path="/article/:id" element={<ViewAritcle />} />
         <Route path="/type/:type" element={<TypeSearch />} />

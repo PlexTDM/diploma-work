@@ -14,15 +14,17 @@ const Profile = () => {
 
   const signOut = () => {
     dispatch({ type: CLEAR_USER_DATA });
+    localStorage.removeItem('user');
     navigate("/login");
   };
 
   useEffect(() => {
     const signOut = () => {
       dispatch({ type: CLEAR_USER_DATA });
+      localStorage.removeItem('user');
       navigate("/login");
     };
-    if (!user) return signOut();
+    if (!localStorage.getItem('user')) return signOut();
   }, [user, dispatch, navigate]);
 
   return (
@@ -33,26 +35,15 @@ const Profile = () => {
           {user && user.username}
         </Typography>
         <Button
-          sx={[
-            {
-              display: "relative",
-              backgroundColor: "#ad3737",
-              ":hover": { backgroundColor: "red" },
-            },
-            (theme) => {
-              return theme.palette.mode === "dark"
-                ? { color: "white" }
-                : { color: "black" };
-            },
-          ]}
-          onClick={signOut}
-        >
+          sx={[{ display: "relative", backgroundColor: "#ad3737", ":hover": { backgroundColor: "red" } },
+          (theme) => theme.palette.mode === "dark" ? { color: "white" } : { color: "black" }]}
+          onClick={signOut}>
           Sign Out
         </Button>
       </div>
-      <div className="md:ml-2 ml-4 md:p-4 border-2 md:w-[95%]">
+      <Paper className="md:ml-2 ml-4 md:p-4 md:w-[95%] min-h-[100%] h-min" sx={{ border: 2, borderColor: 'secondary' }}>
         {user && <ProfileMenu user={user} />}
-      </div>
+      </Paper>
     </Paper>
   );
 };

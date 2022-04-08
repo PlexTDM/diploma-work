@@ -125,7 +125,7 @@ const Admin = () => {
         )
       })}
 
-      <Pagination count={Math.ceil(count/5)} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
+      <Pagination count={Math.ceil(count/5)||1} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
     </Stack>
   )
 
