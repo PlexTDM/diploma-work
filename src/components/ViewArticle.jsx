@@ -13,9 +13,12 @@ const One = () => {
   const [article, setArticle] = useState('');
   const [author, setAuthor] = useState('');
 
+  // const api = 'http://localhost:4000';
+  const api = '';
+
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get('http://localhost:4000/idsearch/' + id)
+      const { data } = await axios.get(api+'/idsearch/' + id)
       setArticle(data.article)
       setAuthor(data.author)
     };
