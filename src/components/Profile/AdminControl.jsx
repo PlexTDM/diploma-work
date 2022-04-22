@@ -75,7 +75,7 @@ const Modal = props => {
             color="secondary"
             onChange={e => setRole(e.target.value)}>
             <MenuItem value="member">member</MenuItem>
-            <MenuItem value="write">write</MenuItem>
+            <MenuItem value="writer">writer</MenuItem>
             <MenuItem value="admin">admin</MenuItem>
           </TextField>
           <Button variant="contained" onClick={update}>Update</Button>

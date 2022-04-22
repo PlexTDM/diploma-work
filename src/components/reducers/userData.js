@@ -76,7 +76,7 @@ export const getUsers = (state = {users:null}, action) => {
     }
 }
 
-export const homePageData = (state = {data:null}, action)=>{
+export const homePageData = (state = {data:[]}, action)=>{
     switch (action.type) {
         case constants.GET_HOME_PAGE_REQ:
             return {
@@ -84,9 +84,10 @@ export const homePageData = (state = {data:null}, action)=>{
                 loading: true,
             }
         case constants.GET_HOME_PAGE_RES:
+            let arr = state.data.concat(action.payload[0]);
             return {
                 ...state,
-                data: action.payload,
+                data: arr,
                 loading: false,
             }
         case constants.GET_HOME_PAGE_ERROR:

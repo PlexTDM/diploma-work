@@ -18,7 +18,7 @@ const TinyMCE = props => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-  const [poster, setPoster] = useState(null);
+  const [poster, setPoster] = useState('');
 
   const apiUri = 'http://localhost:4000';
   const swal = withReactContent(Swal)
@@ -26,9 +26,7 @@ const TinyMCE = props => {
   const { user } = userData;
   const update = props.update;
 
-  const resizeImage = settings => {
-    let file = settings.file;
-    let maxSize = settings.maxSize;
+  const resizeImage = (file, maxSize) => {
     let reader = new FileReader();
     let image = new Image();
     let canvas = document.createElement('canvas');
@@ -63,7 +61,7 @@ const TinyMCE = props => {
   const setImg = e => {
     const reader = new FileReader();
     reader.onload = () => {
-      resizeImage({ file: e.target.files[0], maxSize: 500 }).then(res => {
+      resizeImage(e.target.files[0],500).then(res => {
         console.log(reader.result.length, res.length);
         setPoster(res);
       })
@@ -124,8 +122,7 @@ const TinyMCE = props => {
           author: user._id,
           type: type,
           poster: poster
-        }, options).then(res => console.log(swal.fire('Амжилттай Нийтлэлээ', res, 'success')))
-
+        }, options).then(swal.fire('Амжилттай Нийтлэлээ', '', 'success'))
       }
     }
   };
@@ -158,7 +155,7 @@ const TinyMCE = props => {
         <Button
           variant="contained" className='ml-4'
           sx={{ height: 50, width: 150 }}
-          component="label">Upload Image<input type="file" hidden accept="image/*" onChange={setImg} />
+          component="label">Set Banner<input type="file" hidden accept="image/*" onChange={setImg} />
         </Button>
       </Stack>
 

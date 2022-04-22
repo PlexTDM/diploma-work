@@ -60,10 +60,43 @@ const FullWidthTabs = (props) => {
   const updatePassHandler = (event) => {
     setUpdatePass(event.target.checked);
   };
+  const resizeImage = (file, maxSize) => {
+    let reader = new FileReader();
+    let image = new Image();
+    let canvas = document.createElement('canvas');
+    const resize = () => {
+      let width = image.width;
+      let height = image.height;
+      if (width > height) {
+        if (width > maxSize) {
+          height *= maxSize / width;
+          width = maxSize;
+        }
+      } else {
+        if (height > maxSize) {
+          width *= maxSize / height;
+          height = maxSize;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+      return canvas.toDataURL('image/png');
+    };
+    return new Promise(resolve => {
+      reader.onload = e=>{
+        image.onload = () => resolve(resize());
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
   const toBase64 = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
-      setAvatar(reader.result);
+      resizeImage(e.target.files[0],500).then(res => {
+        setAvatar(res);
+      })
     };
     reader.readAsDataURL(e.target.files[0]);
   };

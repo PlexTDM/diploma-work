@@ -1,39 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
-html{
-    margin: 0;
-    padding: 0;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap");
+html {
+  margin: 0;
+  padding: 0;
 }
-body{
-    margin: 0;
-    padding: 0;
-    /* font-family: Roboto Condensed, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+body {
+  margin: 0;
+  padding: 0;
+  /* font-family: Roboto Condensed, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
             Segoe UI Symbol, Noto Color Emoji; */
 }
 
-table, th, td {
-    border: 1px solid gray;
+table,
+th,
+td {
+  border: 1px solid gray;
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: none !important;
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: none !important;
 }
 
-.socialsharebtn{
-    font-family: "Roboto Condensed" !important;
+.socialsharebtn {
+  font-family: "Roboto Condensed" !important;
 }
-.navBtn{
-    border-radius: 0 !important;
-    border-right: 2px solid #e6e6e6 !important;
-    margin: 0 !important;
-    /* padding: .5rem; */
+.navBtn {
+  border-radius: 0 !important;
+  border-right: 2px solid #e6e6e6 !important;
+  margin: 0 !important;
+  /* padding: .5rem; */
 }
 /* .appbar{
     display: flex !important;
@@ -43,49 +45,65 @@ input:-webkit-autofill:active{
     padding: 0;
     height: min-content;
 } */
-.container{
-    max-width: 60%;
-    margin-left: auto;
-    margin-right: auto;
+.container {
+  max-width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }
-.header{
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: center;
-    margin: 3px 2%;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  margin: 3px 2%;
 }
-.header p{
-    margin: .2rem;
-    font-size: 1rem;
+.header p {
+  margin: 0.2rem;
+  font-size: 1rem;
 }
-hr{
-    width: 96%;
-    border:2px solid lightblue;
+hr {
+  width: 96%;
+  border: 2px solid lightblue;
 }
-.header img{
-    overflow: hidden;
-    border-radius: 50%;
-    width: 80px;
-    height: 100px;
+.header img {
+  overflow: hidden;
+  border-radius: 50%;
+  width: 80px;
+  height: 100px;
 }
-.articleHead{
-    margin: 0 10px;
+.articleHead {
+  margin: 0 10px;
 }
-.articleBody{
-    margin: 0 10px;
-    /* font-weight: 550; */
-    font-style: arial;
+.articleBody {
+  margin: 0 10px;
+  /* font-weight: 550; */
+  font-style: arial;
+}
+img.hp-img{
+transition: all 0.2s ease-in-out;
+}
+img.hp-img:hover {
+    -webkit-filter: brightness(70%);
+    -webkit-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    -ms-transition: all .2s ease;
+    transition: all .2s ease;
+    cursor: pointer;
 }
 
-.MuiTabs-indicator{
-    background-color: #01b9f5 !important;
+.MuiTabs-indicator {
+  background-color: #01b9f5 !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
+}
+/* carousel dots */
+.control-dots {
+  margin: 0 !important;
 }

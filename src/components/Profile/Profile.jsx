@@ -35,7 +35,13 @@ const Profile = () => {
           {user && user.username}
         </Typography>
         <Button
-          sx={[{ display: "relative", backgroundColor: "#ad3737", ":hover": { backgroundColor: "red" } },
+          sx={[{ display: "relative", backgroundColor: "#407a59", ":hover": { backgroundColor: "aqua", color:'#c32bf5', fontWeight:'bold' } },
+          (theme) => theme.palette.mode === "dark" ? { color: "white" } : { color: "black" }]}
+          onClick={()=>navigate('/write')}>
+          Write Articles
+        </Button>
+        <Button
+          sx={[{ display: "relative", backgroundColor: "#ad3737",marginTop:'10px', ":hover": { backgroundColor: "red" } },
           (theme) => theme.palette.mode === "dark" ? { color: "white" } : { color: "black" }]}
           onClick={signOut}>
           Sign Out

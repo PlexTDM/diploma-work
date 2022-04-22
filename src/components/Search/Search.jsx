@@ -12,13 +12,12 @@ const Search = () => {
     const fetchData = async () => {
       console.log(`http://localhost:4000/search?type=${type}&q=${q}`)
       const {data} = await axios.get(`http://localhost:4000/search?type=${type}&q=${q}`)
-      setSearchData(data.message)
-      console.log(data.message)
+      setSearchData(data)
     };
     fetchData();
   }, [type, q]);
   
-  return <ShowSearch data={searchData}/>
+  return <ShowSearch data={searchData.message} type={type} pagination={searchData.count}/>
 
 
 

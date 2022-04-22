@@ -5,17 +5,22 @@ import ShowSearch from './ShowSearch';
 const Search = () => {
   const { type } = useParams();
   const [searchData, setSearchData] = useState(null);
-
+  const limit = 2;
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get('http://localhost:4000/search?type=' + type)
-      setSearchData(data.message)
+      const { data } = await axios.get(`http://localhost:4000/search?type=${type}&limit=${limit}`)
+      console.log(data.count)
+      setSearchData(data)
     };
-    fetchData();
+    if(!searchData)fetchData();
+  }, [type,searchData]);
+  useEffect(() => {
     return ()=>setSearchData(null)
   }, [type]);
 
-  return <ShowSearch data={searchData} />
+   return (<>
+    {searchData&&<ShowSearch data={searchData.message} type={type} pagination={searchData.count} limit={limit} />}
+   </>)
 
 
 

@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+// import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HashRouter, Routes, Route } from "react-router-dom";
 import './index.css';
@@ -8,7 +8,7 @@ import store from './components/store';
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={store}>
       {/* <BrowserRouter> */}
       <HashRouter>
@@ -18,5 +18,5 @@ root.render(
       {/* </BrowserRouter> */}
       </HashRouter>
     </Provider>
-  </StrictMode>
+  // </StrictMode>
 );

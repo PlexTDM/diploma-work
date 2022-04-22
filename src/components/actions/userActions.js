@@ -2,6 +2,7 @@ import * as constants from "../constants/constants";
 import axios from "axios";
 
 const uri = "http://localhost:4000";
+// const uri = ' ';
 
 export const getUserData = (userId) => async (dispatch) => {
 	const user = JSON.parse(localStorage.getItem("user"));
@@ -113,9 +114,9 @@ export const getUsers = (page) => async (dispatch) => {
 	});
 };
 
-export const getHomeArticles = () => async (dispatch) => {
+export const getHomeArticles = (num) => async (dispatch) => {
 	dispatch({ type: constants.GET_HOME_PAGE_REQ });
-	await axios.get(uri + "/home", 
+	await axios.get(uri + `/latest/${num}`,
 	).then(res => {
 		dispatch({
 			type: constants.GET_HOME_PAGE_RES,
