@@ -33,7 +33,6 @@ const One = () => {
   const sharebtnstyles1 = "w-min flex justify-center bg-[#1da1f3] p-2 cursor-pointer uppercase"
   const avCss = "100px";
 
-  const shareUrl = 'http://github.com';
   const quote = article.title || '';
   console.log(isSm);
   return (
@@ -61,7 +60,7 @@ const One = () => {
         <Stack spacing={2} direction='row' className='px-8 py-2'>
           <p
             onClick={() => {
-              window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${quote}`, 'newwindow', 'width=600, height=350');
+              window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=${quote}`, 'newwindow', 'width=600, height=350');
               return false;
             }}
             className={sharebtnstyles}>
