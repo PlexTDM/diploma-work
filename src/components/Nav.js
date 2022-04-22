@@ -18,7 +18,7 @@ const Nav = (props) => {
   const open = Boolean(anchorEl);
   const isMd = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const isSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
-  const isXs = useMediaQuery('(max-width:320px)');
+  // const isXs = useMediaQuery('(max-width:320px)');
   const [search, setSearch] = useState('');
 
   const userData = useSelector(state => state.userData);

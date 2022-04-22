@@ -37,7 +37,8 @@ const FullWidthTabs = (props) => {
   const [password, setPassword] = useState(""); //user.password
   const [comfirmPassword, setComfirmPassword] = useState("");
   const [avatar, setAvatar] = useState(user.avatar);
-  const api = "http://localhost:4000";
+  // const api = "http://localhost:4000";
+  const api ='';
   const [people, setPeople] = useState(data);
 
   useEffect(() => {

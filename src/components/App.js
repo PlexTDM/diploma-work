@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { deepOrange, grey, blue } from "@mui/material/colors";
 import Nav from "./Nav";
@@ -15,6 +15,11 @@ import { getUserData } from "./actions/userActions";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import HomePage from "./HomePage";
+
+const ReDiRecT = () => {
+  const navigate = useNavigate();
+  navigate("/home");
+}
 
 const App = () => {
   const [mode, setMode] = useState("dark");
@@ -77,6 +82,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Nav ToggleTheme={ToggleTheme} />
       <Routes>
+        <Route path="/" element={<ReDiRecT />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/write" element={<TinyMCE />} />

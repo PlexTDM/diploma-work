@@ -1,8 +1,8 @@
 import * as constants from "../constants/constants";
 import axios from "axios";
 
-const uri = "http://localhost:4000";
-// const uri = ' ';
+// const uri = "http://localhost:4000";
+const uri = '';
 
 export const getUserData = (userId) => async (dispatch) => {
 	const user = JSON.parse(localStorage.getItem("user"));

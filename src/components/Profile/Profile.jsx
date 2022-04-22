@@ -29,7 +29,7 @@ const Profile = () => {
 
   return (
     <Paper className="w-full min-h-[calc(100vh-66px)] flex justify-center p-2 md:flex-col">
-      <div className="flex items-center flex flex-col">
+      <div className="flex items-center flex-col">
         <Avatar sx={{ width: 300, height: 300 }} src={user && user.avatar} />
         <Typography variant="h3" className="!mx-auto w-min !mt-4">
           {user && user.username}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { Paper, Typography, Stack, Avatar } from '@mui/material';
@@ -8,6 +9,7 @@ const One = () => {
   const { id } = useParams();
   const theme = useTheme();
   const mode = theme.palette.mode;
+  const isSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const [article, setArticle] = useState('');
   const [author, setAuthor] = useState('');
 
@@ -24,14 +26,15 @@ const One = () => {
     }
   }, [id]);
 
-  const sharebtnstyles = "w-[20%] flex justify-center bg-[#3e5ba9] p-2 cursor-pointer uppercase"
-  const sharebtnstyles1 = "w-[20%] flex justify-center bg-[#1da1f3] p-2 cursor-pointer uppercase"
+  const sharebtnstyles = "w-min flex justify-center bg-[#3e5ba9] p-2 cursor-pointer uppercase"
+  const sharebtnstyles1 = "w-min flex justify-center bg-[#1da1f3] p-2 cursor-pointer uppercase"
   const avCss = "100px";
 
   const shareUrl = 'http://github.com';
   const quote = article.title || '';
+  console.log(isSm);
   return (
-    <Paper className='relative mb-[5%] p-12 '>
+    <Paper className={`relative mb-[5%] ${isSm?'p-0':'p-12'}`}>
       <article>
         <div className='articleHead'>
           <Typography variant='h2'>
@@ -45,7 +48,7 @@ const One = () => {
             </span>
           </span>}
         </div>
-        <div className={`articleBody w-[80%] prose prose-lg ${mode === 'light' ? 'prose-zinc' : 'prose-invert'}`}
+        <div className={`articleBody ${isSm?'w-[95%]':'w-[80%]'} prose prose-lg ${mode === 'light' ? 'prose-zinc' : 'prose-invert'}`}
           dangerouslySetInnerHTML={{ __html: article.body }}
         ></div>
         {/* <span className="info">

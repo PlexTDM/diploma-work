@@ -6,9 +6,11 @@ const Search = () => {
   const { type } = useParams();
   const [searchData, setSearchData] = useState(null);
   const limit = 2;
+  const api = '';
+  // const api = 'http://localhost:4000';
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(`http://localhost:4000/search?type=${type}&limit=${limit}`)
+      const { data } = await axios.get(`${api}/search?type=${type}&limit=${limit}`)
       console.log(data.count)
       setSearchData(data)
     };

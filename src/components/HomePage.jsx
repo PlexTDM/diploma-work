@@ -38,8 +38,9 @@ const HomePage = () => {
   useEffect(() => {
     if (typeArr.length > 0) return
     const sendReq = (type, i) => {
-      const url = `http://localhost:4000`;
-      axios.get(`${url}/search?type=${type}&limit=1&skip=${i}&project=title,poster,body`).then((response) => {
+      // const api = `http://localhost:4000`;
+      const api = '';
+      axios.get(`${api}/search?type=${type}&limit=1&skip=${i}&project=title,poster,body`).then((response) => {
         const data = response.data.message;
         SettypeArr(prevState => [...prevState, { type, data: data }])
       })
@@ -66,6 +67,7 @@ const HomePage = () => {
         return null;
       })
       if (arr.length > 0) newArr.push(arr);
+      return newArr;
     })
     // console.log(newArr)
     return newArr;

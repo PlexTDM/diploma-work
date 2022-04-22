@@ -20,7 +20,9 @@ const TinyMCE = props => {
   const [loading, setLoading] = useState(false);
   const [poster, setPoster] = useState('');
 
-  const apiUri = 'http://localhost:4000';
+  // const api = 'http://localhost:4000';
+  const api = '';
+
   const swal = withReactContent(Swal)
   const userData = useSelector(state => state.userData);
   const { user } = userData;
@@ -72,7 +74,7 @@ const TinyMCE = props => {
   useEffect(() => {
     if (!user || !(user.role === 'writer' || user.role === 'admin')) return;
     const fetchData = async () => {
-      const { data } = await axios.get(apiUri + '/idsearch/' + id);
+      const { data } = await axios.get(api + '/idsearch/' + id);
       setTitle(data.article.title);
       setType(data.article.type);
       setContent(data.article.body);
@@ -101,7 +103,7 @@ const TinyMCE = props => {
       if (update) {
         try {
           setLoading(true);
-          await axios.put(apiUri + '/update/' + id, {
+          await axios.put(api + '/update/' + id, {
             title: title,
             type: type,
             body: editorContent,
@@ -116,7 +118,7 @@ const TinyMCE = props => {
           swal.fire('Алдаа гарлаа', '', 'error')
         }
       } else {
-        await axios.post(apiUri, {
+        await axios.post(api, {
           title: title,
           article: editorContent,
           author: user._id,
