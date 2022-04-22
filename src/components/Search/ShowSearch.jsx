@@ -32,7 +32,7 @@ const ShowSearch = props => {
 
       {data && data.length !== 0 ?
         data.map((data, i) => {
-          return <Stack key={i} className='!h-min !h-[2%] w-auto min-w-[50%]' spacing={2} direction="column">
+          return <Stack key={i} className='!h-min  w-auto min-w-[50%]' spacing={2} direction="column">
             <Button onMouseUp={() => navigate('/article/' + data._id)} variant='text'>{data.title}</Button>
             <Typography component={'div'} sx={{p:2}}>
               {stripHtml(data.body).substring(0, 100)}...

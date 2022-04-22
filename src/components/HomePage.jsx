@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { Paper, Grid, Stack, Divider } from "@mui/material";
 import { getHomeArticles } from "./actions/userActions";
@@ -16,15 +16,16 @@ const HomePage = () => {
   const homePageData = useSelector(state => state.homePage);
   const { data, loading } = homePageData;
   useEffect(() => {
+    // if (data.length >= 4) return
     // get latest 3 seperately so it's faster
     dispatch(getHomeArticles(0));
     dispatch(getHomeArticles(1));
     dispatch(getHomeArticles(2));
     dispatch(getHomeArticles(3));
   }, [dispatch]);
-  useEffect(() => {
-    data && data.sort((a, b) => a - b);
-  }, [data]);
+  // useEffect(() => {
+  //   data && data.sort((a, b) => a._id - b._id);
+  // }, [data]);
   // useEffect(() => {
   //   const types = ['politics', 'sport', 'health', 'technology'];
   //   if (typeArr.length > 0) return
@@ -37,7 +38,8 @@ const HomePage = () => {
   useEffect(() => {
     if (typeArr.length > 0) return
     const sendReq = (type, i) => {
-      axios.get(`http://localhost:4000/search?type=${type}&limit=1&skip=${i}&project=title,poster,body`).then((response) => {
+      const url = `http://localhost:4000`;
+      axios.get(`${url}/search?type=${type}&limit=1&skip=${i}&project=title,poster,body`).then((response) => {
         const data = response.data.message;
         SettypeArr(prevState => [...prevState, { type, data: data }])
       })
@@ -65,7 +67,7 @@ const HomePage = () => {
       })
       if (arr.length > 0) newArr.push(arr);
     })
-    console.log(newArr)
+    // console.log(newArr)
     return newArr;
   }
 
@@ -74,7 +76,7 @@ const HomePage = () => {
   return (
     <Paper sx={{ maxWidth: '100%', minHeight: 'calc(100vh - 68px)' }} className='flex justify-center'>
       {loading && <LoadingCircle />}
-      <Stack direction='column' className='flex w-full items-center'>
+      <Stack direction='column' className='flex w-full items-center cursor-pointer'>
         {data && data[0] &&
           <div className="w-1/3 m-4">
             <Carousel
@@ -93,18 +95,21 @@ const HomePage = () => {
         {/* <div className="ml-8"> */}
         <Divider />
         {sortedTypes && sortedTypes.map((type, i) => (
-          <Grid key={i} container spacing={2} className='p-2 !mt-2 min-h-[8rem] h-auto max-w-[100%]'>
-            {type.map(data => {
-              data = data.data
-              return (
-                <div key={data._id} xs={4} className='flex flex-col h-56 w-[25%] overflow-hidden'>
-                  <div className="w-full min-h-[100%] relative p-1 ">
-                    {typeof data.poster === 'string' && <img src={data.poster} alt={data.title} className='w-full h-auto hp-img'/>}
-                    <span className="">{data.title}</span>
-                  </div>
-                </div>)
-            })}
-          </Grid>
+          <Fragment key={i}>
+            <Grid container spacing={2} className='p-2 !mt-2 min-h-[8rem] h-auto max-w-[100%]'>
+              {type.map(data => {
+                data = data.data
+                return (
+                  <div key={data._id} xs={4} className='flex flex-col h-62 w-[25%] overflow-hidden'>
+                    <div className="w-full min-h-[100%] relative p-1 ">
+                      {typeof data.poster === 'string' && <img src={data.poster} alt={data.title} className='w-full h-auto hp-img' />}
+                      <span className="">{data.title}</span>
+                    </div>
+                  </div>)
+              })}
+            </Grid>
+            <Divider />
+          </Fragment>
         ))}
       </Stack>
     </Paper>

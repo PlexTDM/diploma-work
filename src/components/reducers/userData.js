@@ -85,6 +85,8 @@ export const homePageData = (state = {data:[]}, action)=>{
             }
         case constants.GET_HOME_PAGE_RES:
             let arr = state.data.concat(action.payload[0]);
+            console.log(arr);
+            arr.sort((a, b) => a._id < b._id? 1 : a._id > b._id ? -1 : 0);
             return {
                 ...state,
                 data: arr,
