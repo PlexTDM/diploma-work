@@ -34,6 +34,7 @@ const One = () => {
   const avCss = "100px";
 
   const quote = article.title || '';
+  const uri = '/shareurl/6262b3e70954c9453b1c0b86'
   console.log(isSm);
   return (
     <Paper className={`relative mb-[5%] ${isSm?'p-0':'p-12'}`}>
@@ -58,9 +59,10 @@ const One = () => {
         <Typography className="date">{article.date}</Typography>
       </span> */}
         <Stack spacing={2} direction='row' className='px-8 py-2'>
+          {console.log(window.location.href)}
           <p
             onClick={() => {
-              window.open(`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=${quote}`, 'newwindow', 'width=600, height=350');
+              window.open(`https://www.facebook.com/dialog/share?href=${uri}&quote=${quote}&app_id=8203424993064267`, 'newwindow', 'width=600, height=350');
               return false;
             }}
             className={sharebtnstyles}>
@@ -71,7 +73,7 @@ const One = () => {
 
           <p
             onClick={() => {
-              window.open(`https://twitter.com/intent/tweet?text=${quote}%20${window.location.href}`, 'newwindow', 'width=600, height=350');
+              window.open(`https://twitter.com/intent/tweet?text=${quote}%20${uri}`, 'newwindow', 'width=600, height=350');
               return false;
             }}
             className={sharebtnstyles1}>
