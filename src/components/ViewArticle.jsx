@@ -34,7 +34,7 @@ const One = () => {
   const avCss = "100px";
 
   const quote = article.title || '';
-  const uri = '/shareurl/6262b3e70954c9453b1c0b86'
+  const uri = window.location.protocol + '//' + window.location.hostname+'/shareurl/6262b3e70954c9453b1c0b86'
   console.log(isSm);
   return (
     <Paper className={`relative mb-[5%] ${isSm?'p-0':'p-12'}`}>
