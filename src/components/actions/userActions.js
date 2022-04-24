@@ -1,13 +1,12 @@
 import * as constants from "../constants/constants";
 import axios from "axios";
 
-// const uri = "http://localhost:4000";
-const uri = '';
+const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
 export const getUserData = (userId) => async (dispatch) => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	const access_token = user.access_token;
-	await axios.get(uri + "/getUser/" + userId, {
+	await axios.get(api + "/getUser/" + userId, {
 		headers: {
 			Authorization: "Bearer " + access_token,
 		},
@@ -43,7 +42,7 @@ export const getUserData = (userId) => async (dispatch) => {
 export const getUserArticle = (userId) => async (dispatch) => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	const access_token = user.access_token;
-	await axios.get(uri + "/getUserArticles/" + userId, {
+	await axios.get(api + "/getUserArticles/" + userId, {
 		headers: {
 			Authorization: "Bearer " + access_token,
 		},
@@ -81,7 +80,7 @@ export const getUsers = (page) => async (dispatch) => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	const access_token = user.access_token;
 	dispatch({ type: constants.GET_USERS_REQ });
-	await axios.get(uri + "/getUsers/" + skips, {
+	await axios.get(api + "/getUsers/" + skips, {
 		headers: {
 			Authorization: "Bearer " + access_token,
 		},
@@ -116,7 +115,7 @@ export const getUsers = (page) => async (dispatch) => {
 
 export const getHomeArticles = (num) => async (dispatch) => {
 	dispatch({ type: constants.GET_HOME_PAGE_REQ });
-	await axios.get(uri + `/latest/${num}`,
+	await axios.get(api + `/latest/${num}`,
 	).then(res => {
 		dispatch({
 			type: constants.GET_HOME_PAGE_RES,

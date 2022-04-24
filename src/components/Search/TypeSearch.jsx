@@ -5,24 +5,22 @@ import ShowSearch from './ShowSearch';
 const Search = () => {
   const { type } = useParams();
   const [searchData, setSearchData] = useState(null);
-  const limit = 2;
-  const api = '';
-  // const api = 'http://localhost:4000';
+  const limit = 5;
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(`${api}/search?type=${type}&limit=${limit}`)
-      console.log(data.count)
+      const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
+      const { data } = await axios.get(`${api}/search?type=${type}&limit=${limit}`);
       setSearchData(data)
     };
-    if(!searchData)fetchData();
-  }, [type,searchData]);
+    if (!searchData) fetchData();
+  }, [type, searchData]);
   useEffect(() => {
-    return ()=>setSearchData(null)
+    return () => setSearchData(null)
   }, [type]);
 
-   return (<>
-    {searchData&&<ShowSearch data={searchData.message} type={type} pagination={searchData.count} limit={limit} />}
-   </>)
+  return (<>
+    {searchData && <ShowSearch data={searchData.message} type={type} pagination={searchData.count} limit={limit} />}
+  </>)
 
 
 

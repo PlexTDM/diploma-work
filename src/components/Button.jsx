@@ -11,6 +11,7 @@ const Button = props => {
         onMouseEnter={()=>setIsHover(true)}
         onMouseLeave={()=>setIsHover(false)}
         sx={[{height:'100%', borderRadius:''},isHover ? {borderBottom:`4px solid ${props.hoverColor || 'transparent'}`} : {borderBottom:'4px solid transparent'},
+        props.sx
       ]}
       >
         {props.children}

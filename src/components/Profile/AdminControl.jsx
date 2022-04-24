@@ -1,5 +1,5 @@
 import { Avatar, Stack, CircularProgress, Pagination, Dialog, TextField, Button, MenuItem } from '@mui/material';
-import { GET_USERS_RESET } from '../constants/constants';
+import { GET_USERS_RESET, UPDATE_USERS_RESET } from '../constants/constants';
 import withReactContent from 'sweetalert2-react-content';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUsers } from '../actions/authActions';
@@ -17,9 +17,22 @@ const Modal = props => {
   const [role, setRole] = useState(user.role);
   const dispatch = useDispatch();
   const response = useSelector(state => state.updateUsers);
-  const { loading } = response;
+  const { loading, data } = response;
 
-  const swal = withReactContent(Swal)
+  const swal = withReactContent(Swal);
+
+  useEffect(() => {
+    if (!data) return
+    swal.fire({
+      title: 'User updated successfully',
+      text: data.message,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    })
+    .then(() => {
+      dispatch({ type: UPDATE_USERS_RESET });
+    })
+  },[data, swal, dispatch])
 
   const toBase64 = e => {
     const reader = new FileReader();
@@ -125,7 +138,7 @@ const Admin = () => {
         )
       })}
 
-      <Pagination count={Math.ceil(count/5)||1} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
+      <Pagination count={Math.ceil(count / 5) || 1} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
     </Stack>
   )
 

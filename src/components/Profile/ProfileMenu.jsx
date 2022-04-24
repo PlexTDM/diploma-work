@@ -1,5 +1,5 @@
 import { CLEAR_USER_ARTICLES, GET_USERS_RESET } from "../constants/constants";
-import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup } from "@mui/material";
+import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup, Divider } from "@mui/material";
 import withReactContent from "sweetalert2-react-content";
 import { getUserArticle, getUserData } from "../actions/userActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { updateUsers } from "../actions/authActions";
 import ReplayIcon from '@mui/icons-material/Replay';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import AdminControl from "./AdminControl";
 import SwitchAndroid from "./SwitchAndroid";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,9 +37,8 @@ const FullWidthTabs = (props) => {
   const [password, setPassword] = useState(""); //user.password
   const [comfirmPassword, setComfirmPassword] = useState("");
   const [avatar, setAvatar] = useState(user.avatar);
-  // const api = "http://localhost:4000";
-  const api ='';
   const [people, setPeople] = useState(data);
+  const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
   useEffect(() => {
     if (!user) return navigate("/login");
@@ -193,7 +192,7 @@ const FullWidthTabs = (props) => {
         {updateLoading && <CircularProgress />}
         <Stack direction="column" className="ml-4" spacing={2}>
           <Stack direction="row" spacing={2} className="flex items-center">
-            <Avatar src={avatar} sx={{ width: 128, height: 128 }} />
+            <Avatar src={avatar} sx={{ width: 128, height: 128 }} variant='square'/>
             <Button
               variant="contained"
               sx={{ height: 50, width: 150 }}
@@ -282,7 +281,8 @@ const FullWidthTabs = (props) => {
           <IconButton className='!absolute top-[-20px] right-[-15px]' onClick={refreshUsers}><ReplayIcon /></IconButton>
           {people && people.length !== 0 ? (
             people.map(item => (
-              <div key={item._id} className="flex flex-row relative m-2">
+              <Fragment key={item._id}>
+              <div className="flex flex-row relative m-2">
                 <Link className="max-w-[75%]" to={"/article/" + item._id}>
                   {item.title}
                 </Link>
@@ -297,6 +297,8 @@ const FullWidthTabs = (props) => {
                   </IconButton>
                 </div>
               </div>
+              <Divider/>
+              </Fragment>
             ))
           ) : (
             <div>No Articles</div>

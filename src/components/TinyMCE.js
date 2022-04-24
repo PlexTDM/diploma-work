@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Paper, TextField, MenuItem, Button, Stack } from '@mui/material';
+import { Paper, TextField, MenuItem, Button, Stack, Menu, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Editor } from '@tinymce/tinymce-react';
 // import tinymce from 'tinymce/tinymce';
@@ -19,9 +19,12 @@ const TinyMCE = props => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [poster, setPoster] = useState('');
+  const [urlPoster, setUrlPoster] = useState('');
 
-  // const api = 'http://localhost:4000';
-  const api = '';
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
   const swal = withReactContent(Swal)
   const userData = useSelector(state => state.userData);
@@ -63,7 +66,7 @@ const TinyMCE = props => {
   const setImg = e => {
     const reader = new FileReader();
     reader.onload = () => {
-      resizeImage(e.target.files[0],500).then(res => {
+      resizeImage(e.target.files[0], 500).then(res => {
         console.log(reader.result.length, res.length);
         setPoster(res);
       })
@@ -86,7 +89,7 @@ const TinyMCE = props => {
       setType('');
       setContent('');
     }
-  }, [update, id, user])
+  }, [update, id, user, api])
 
   const log = async () => {
     if (editorRef.current) {
@@ -125,6 +128,10 @@ const TinyMCE = props => {
           type: type,
           poster: poster
         }, options).then(swal.fire('Амжилттай Нийтлэлээ', '', 'success'))
+        .catch(err => {
+          console.log(err);
+          swal.fire('Алдаа гарлаа', '', err)
+        })
       }
     }
   };
@@ -133,6 +140,21 @@ const TinyMCE = props => {
   return user && (user.role === 'writer' || user.role === 'admin') ? (
     <Paper className='p-2'>
       {loading && <LoadingCircle />}
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={()=>setAnchorEl(null)}
+        // onClick={()=>setAnchorEl(null)}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Button 
+          variant="contained" sx={{ height: 50, width: 150, ml:2 }} component="label">Choose File<input type="file" hidden accept="image/*" onChange={setImg} />
+        </Button>
+        <Divider sx={{my:2}}/>
+        <TextField type='url' variant='filled' hiddenLabel onChange={e=>setUrlPoster(e.target.value)} size="small" placeholder='URL'/>
+        <Button variant="contained" sx={{ height: 'min-content', width: 150, ml:2 }} onClick={()=>setPoster(urlPoster)}>Save</Button>
+      </Menu>
       <Stack spacing={2} direction='row'>
         <TextField
           value={type}
@@ -153,12 +175,8 @@ const TinyMCE = props => {
           color="secondary"
         />
 
-        {poster && <img alt='poster' src={poster}/>}
-        <Button
-          variant="contained" className='ml-4'
-          sx={{ height: 50, width: 150 }}
-          component="label">Set Banner<input type="file" hidden accept="image/*" onChange={setImg} />
-        </Button>
+        {poster && <img alt='poster' src={poster} />}
+        <Button variant="contained" className='ml-4' onClick={e=>setAnchorEl(e.currentTarget)}>Set Poster</Button>
       </Stack>
 
       <Editor

@@ -5,8 +5,8 @@ import NavButton from './Button';
 import { useState } from 'react';
 import UserIcon from '@mui/icons-material/PersonOutline';
 import SearchIcon from '@mui/icons-material/Search';
-import logo from '../assets/logo-light.png';
-import darkLogo from '../assets/logo-dark.png';
+// import logo from '../assets/logo-light.png';
+// import darkLogo from '../assets/logo-dark.png';
 import { useTheme } from '@mui/material/styles';
 import ThemeSwitch from './ThemeSwitch';
 import { useSelector } from 'react-redux';
@@ -61,8 +61,10 @@ const Nav = (props) => {
       <AppBar position="static" className='!m-0' color='transparent' enableColorOnDark>
         <Toolbar className='!flex !justify-center'>
 
-          <NavButton onClick={toHome}>
-            {<img src={theme.palette.mode === 'dark' ? logo : darkLogo} alt='logo' />}
+          <NavButton onClick={toHome} sx={{paddingY:'0'}}>
+            {/* {<img src={theme.palette.mode === 'dark' ? logo : darkLogo} alt='logo' />}
+             */}
+             <div id="earth"></div>
           </NavButton>
 
           {user && user ?
@@ -76,36 +78,9 @@ const Nav = (props) => {
 
           <Menu
             anchorEl={anchorEl}
-            id="account-menu"
             open={open}
             onClose={handleClose}
             onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                '& .MuiAvatar-root': {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                '&:before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: 'background.paper',
-                  transform: 'translateY(-50%) rotate(45deg)',
-                  zIndex: 0,
-                },
-              },
-            }}
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >

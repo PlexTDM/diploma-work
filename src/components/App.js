@@ -1,7 +1,7 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider,  experimental_sx as sx } from "@mui/material/styles";
 import { deepOrange, grey, blue } from "@mui/material/colors";
 import Nav from "./Nav";
 import TinyMCE from "./TinyMCE";
@@ -12,13 +12,14 @@ import Login from "./Auth/Login";
 import Register from "./Auth/Register";
 import Profile from "./Profile/Profile";
 import { getUserData } from "./actions/userActions";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import HomePage from "./HomePage";
 
 const ReDiRecT = () => {
   const navigate = useNavigate();
-  navigate("/home");
+  useEffect(() => {
+    navigate("/home");
+  }, [navigate]);
 }
 
 const App = () => {
@@ -40,41 +41,51 @@ const App = () => {
   };
 
   const theme = createTheme({
-    // components: {
-    //   MuiTextField:{
-    //     primary: blue
-    //   }
-    // },
+    components: {
+      MuiAvatar:{
+        styleOverrides: {
+          root: sx({
+            border: '1px solid #000',
+          })
+        },
+      }
+    },
     palette: {
       mode,
       ...(mode === "light"
         ? {
-            primary: deepOrange,
-            divider: grey[700],
-            background: {
-              default: "#fff",
-              paper: "#fff",
-            },
-            text: {
-              primary: "#000",
-              secondary: grey[500],
-            },
+          primary: deepOrange,
+          divider: grey[700],
+          background: {
+            default: "#fff",
+            paper: "#fff",
+          },
+          text: {
+            main: "#000",
+          },
+          link: {
+            main: '#0568CD',
           }
+        }
         : {
-            primary: {
-              main: "#fff",
-            },
-            secondary: blue,
-            divider: grey[700],
-            background: {
-              default: grey[900],
-              paper: "#000",
-            },
-            text: {
-              primary: "#fff",
-              secondary: grey[500],
-            },
-          }),
+          primary: {
+            main: "#fff",
+          },
+          secondary: blue,
+          divider: grey[700],
+          background: {
+            default: grey[900],
+            paper: "#000",
+          },
+          text: {
+            main: "#fff",
+            primary: "#fff",
+            secondary: grey[500],
+          },
+          link: {
+            main: '#0568CD',
+          }
+        }),
     },
   });
 
@@ -92,6 +103,7 @@ const App = () => {
         <Route path="/search">
           <Route path="/search/:q/:type" element={<Search />} />
           <Route path="/search/:q" element={<Search />} />
+          <Route path="/search" element={<Search />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

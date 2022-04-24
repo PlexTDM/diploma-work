@@ -35,16 +35,7 @@ input:-webkit-autofill:active {
   border-radius: 0 !important;
   border-right: 2px solid #e6e6e6 !important;
   margin: 0 !important;
-  /* padding: .5rem; */
 }
-/* .appbar{
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-    height: min-content;
-} */
 .container {
   max-width: 60%;
   margin-left: auto;
@@ -79,17 +70,17 @@ hr {
   /* font-weight: 550; */
   font-style: arial;
 }
-img.hp-img{
-transition: all 0.2s ease-in-out;
+img.hp-img {
+  transition: all 0.2s ease-in-out;
 }
 img.hp-img:hover {
-    -webkit-filter: brightness(70%);
-    -webkit-transition: all .2s ease;
-    -moz-transition: all .2s ease;
-    -o-transition: all .2s ease;
-    -ms-transition: all .2s ease;
-    transition: all .2s ease;
-    cursor: pointer;
+  -webkit-filter: brightness(70%);
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .MuiTabs-indicator {
@@ -106,4 +97,56 @@ input[type="number"] {
 /* carousel dots */
 .control-dots {
   margin: 0 !important;
+}
+
+.legend {
+  position: absolute;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3px;
+  opacity: 0.5;
+  width: max-content;
+  height: max-content;
+  background: rgb(56, 56, 56);
+  transition-duration: 0.2s;
+  max-width: 80%;
+}
+.swiper:hover .legend {
+  transition-duration: 0.2s;
+  opacity: 1;
+}
+#earth {
+  width: 55px;
+  aspect-ratio: 1;
+  background: url(https://web.archive.org/web/20150807125159if_/http://www.noirextreme.com/digital/Earth-Color4096.jpg);
+  border-radius: 50%;
+  background-size: 150px;
+  /* box-shadow: inset 8px 36px 80px 36px rgb(0, 0, 0), inset -6px 0 12px 4px rgba(255, 255, 255, 0.3); */
+  animation-name: rotate;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  -webkit-animation-name: rotate;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+@keyframes rotate {
+  from {
+    background-position: 0px 0px;
+  }
+  to {
+    background-position: 610px 0px;
+  }
+}
+@-webkit-keyframes rotate {
+  from {
+    background-position: 0px 0px;
+  }
+  to {
+    background-position: 610px 0px;
+  }
 }

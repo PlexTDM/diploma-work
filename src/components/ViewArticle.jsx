@@ -13,12 +13,10 @@ const One = () => {
   const [article, setArticle] = useState('');
   const [author, setAuthor] = useState('');
 
-  // const api = 'http://localhost:4000';
-  const api = '';
-
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(api+'/idsearch/' + id)
+      const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
+      const { data } = await axios.get(api + '/idsearch/' + id)
       setArticle(data.article)
       setAuthor(data.author)
     };
@@ -34,13 +32,12 @@ const One = () => {
   const avCss = "100px";
 
   const quote = article.title || '';
-  const uri = window.location.protocol + '//' + window.location.hostname+'/shareurl/6262b3e70954c9453b1c0b86'
-  console.log(isSm);
+  const uri = window.location.protocol + '//' + window.location.hostname + '/shareurl/6262b3e70954c9453b1c0b86';
   return (
-    <Paper className={`relative mb-[5%] ${isSm?'p-0':'p-12'}`}>
+    <Paper className={`relative mb-[5%] ${isSm ? 'p-0' : 'p-12'}`}>
       <article>
         <div className='articleHead'>
-          <Typography variant='h2'>
+          <Typography className='!text-3xl'>
             {article.title}
           </Typography>
           {author && <span className="flex flex-row w-max h-min p-4">
@@ -51,15 +48,10 @@ const One = () => {
             </span>
           </span>}
         </div>
-        <div className={`articleBody ${isSm?'w-[95%]':'w-[80%]'} prose prose-lg ${mode === 'light' ? 'prose-zinc' : 'prose-invert'}`}
+        <div className={`articleBody md:w-[95%] w-[90%] prose prose-lg max-w-none ${mode === 'light' ? 'prose-zinc' : 'prose-invert'}`}
           dangerouslySetInnerHTML={{ __html: article.body }}
         ></div>
-        {/* <span className="info">
-        <Typography className="author">{author && 'By: '+author.username}</Typography>
-        <Typography className="date">{article.date}</Typography>
-      </span> */}
         <Stack spacing={2} direction='row' className='px-8 py-2'>
-          {console.log(window.location.href)}
           <p
             onClick={() => {
               window.open(`https://www.facebook.com/dialog/share?href=${uri}&quote=${quote}&app_id=8203424993064267`, 'newwindow', 'width=600, height=350');

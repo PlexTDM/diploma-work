@@ -1,14 +1,13 @@
 import * as constants from "../constants/constants";
 import axios from "axios";
 
-// const uri = "http://localhost:4000";
-const uri = '';
+const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
 export const registerUsers = (formData) => async (dispatch) => {
   dispatch({
     type: constants.REG_USERS_REQ,
   });
-  await axios.post(uri + "/register", formData)
+  await axios.post(api + "/register", formData)
   .then(res => {
     dispatch({
       type: constants.REG_USERS_RES,
@@ -44,7 +43,7 @@ export const loginUsers = (formData) => async (dispatch) => {
   dispatch({
     type: constants.LOGIN_USERS_REQ,
   });
-  await axios.post(uri + "/login", formData)
+  await axios.post(api + "/login", formData)
   .then(res => {
     dispatch({
       type: constants.LOGIN_USERS_RES,
@@ -81,7 +80,7 @@ export const updateUsers = (_id, formData) => async (dispatch) => {
   dispatch({
     type: constants.UPDATE_USERS_REQ,
   });
-  await axios.put(uri + "/updateUser/" + _id, formData, {
+  await axios.put(api + "/updateUser/" + _id, formData, {
     headers: {
       Authorization: "Bearer " + access_token,
     },
