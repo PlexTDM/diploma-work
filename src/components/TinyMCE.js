@@ -100,6 +100,9 @@ const TinyMCE = props => {
       if (title.trim() === '') {
         return alert('Гарчигаа оруулна уу');
       }
+      if(poster.trim() === '') {
+        return alert('Зурагаа оруулна уу');
+      }
       const userlocal = JSON.parse(localStorage.getItem('user'));
       const access_token = userlocal.access_token;
       const options = { headers: { 'Authorization': 'Bearer ' + access_token } };
@@ -127,7 +130,7 @@ const TinyMCE = props => {
           author: user._id,
           type: type,
           poster: poster
-        }, options).then(swal.fire('Амжилттай Нийтлэлээ', '', 'success'))
+        }, options).then(res=>{swal.fire('Амжилттай Нийтлэлээ', '', 'success');console.log(res)})
         .catch(err => {
           console.log(err);
           swal.fire('Алдаа гарлаа', '', err)
@@ -138,7 +141,7 @@ const TinyMCE = props => {
 
 
   return user && (user.role === 'writer' || user.role === 'admin') ? (
-    <Paper className='p-2'>
+    <Paper className='p-2 pb-32'>
       {loading && <LoadingCircle />}
       <Menu
         anchorEl={anchorEl}
@@ -153,7 +156,7 @@ const TinyMCE = props => {
         </Button>
         <Divider sx={{my:2}}/>
         <TextField type='url' variant='filled' hiddenLabel onChange={e=>setUrlPoster(e.target.value)} size="small" placeholder='URL'/>
-        <Button variant="contained" sx={{ height: 'min-content', width: 150, ml:2 }} onClick={()=>setPoster(urlPoster)}>Save</Button>
+        <Button variant="contained" sx={{ height: 'min-content', width: 150, ml:2 }} onClick={()=>{setPoster(urlPoster);setAnchorEl(null)}}>Save</Button>
       </Menu>
       <Stack spacing={2} direction='row'>
         <TextField
@@ -175,8 +178,8 @@ const TinyMCE = props => {
           color="secondary"
         />
 
-        {poster && <img alt='poster' src={poster} />}
-        <Button variant="contained" className='ml-4' onClick={e=>setAnchorEl(e.currentTarget)}>Set Poster</Button>
+        <Button variant="contained" className='ml-4 h-min' onClick={e=>setAnchorEl(e.currentTarget)}>{poster?'Change Poster':'Set Poster'}</Button>
+        {poster && <img className='max-w-[50%]' alt='poster' src={poster} />}
       </Stack>
 
       <Editor
@@ -216,7 +219,7 @@ const TinyMCE = props => {
         }}
         className='mt-4'
       />
-      <Button onClick={log} sx={{ border: '1px solid gray', marginX: 'auto', width: 'max-content', display: 'block' }}>
+      <Button onClick={log} disabled={loading?true:false} sx={{ border: '1px solid gray', marginX: 'auto', width: 'max-content', display: 'block', marginTop: 5 }}>
         {update ? 'Засах' : 'Нийтлэх'}
       </Button>
     </Paper>

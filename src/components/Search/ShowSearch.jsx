@@ -35,7 +35,7 @@ const ShowSearch = props => {
     <Paper className='pt-2 min-h-[calc(100vh_-_68px)] flex flex-col items-center' elevation={24}>
       {data && data.length !== 0 ?
         data.map((data, i) => {
-          return <Stack key={i} className={`!h-min w-auto min-w-[50%] max-w-[70%] prose prose-lg ${mode === 'light' ? 'prose-zinc' : 'prose-invert'}`} spacing={2} direction="column">
+          return <Stack key={i} className={`!h-min w-auto min-w-[50%] max-w-[70%] sm:max-w-full prose prose-lg ${mode === 'light' ? 'prose-zinc' : 'prose-invert'}`} spacing={2} direction="column">
             <Button onMouseUp={() => navigate('/article/' + data._id)} variant='text' color='link'>{data.title}</Button>
             <Typography component={'div'} sx={{p:2}}>
               {stripHtml(data.body).substring(0, 150)}...
@@ -43,7 +43,7 @@ const ShowSearch = props => {
             <Divider />
           </Stack>
         }) : <span className='text-2xl'>Таны хайлтнаас үр дүн олдсонгүй</span>}
-      {pagination && <Pagination className='mt-4' variant="outlined" count={Math.ceil(pagination / limit)} shape="rounded" page={page} onChange={handlePage} />}
+      {pagination && <Pagination className='mt-4' variant="outlined" count={Math.ceil((pagination / limit)||1)} shape="rounded" page={page} onChange={handlePage} />}
     </Paper>
   )
 }

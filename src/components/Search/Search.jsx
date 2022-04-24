@@ -1,17 +1,28 @@
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ShowSearch from './ShowSearch';
 const Search = () => {
   let { type, q } = useParams();
+  const [searchData, setSearchData] = useState(null);
 
   if (!type || type === 'all') type = '';
   if (!q || q === 'all') q = '';
   useEffect(() => {
-    const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
-    axios.get(`${api}/search?type=${type}&q=${q}`)
-      .then(res => <ShowSearch data={res.data.message} type={type} pagination={res.data.count} />);
+    const fetchData = async () => {
+      const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
+      const { data } = await axios.get(`${api}/search?type=${type}&q=${q}`)
+      setSearchData(data)
+    };
+    fetchData();
+    return () => {
+      setSearchData(null)
+    }
   }, [type, q]);
-  return <ShowSearch />
+
+  return searchData&&<ShowSearch data={searchData.message} type={type} pagination={searchData.count} />
+
+
+
 }
 export default Search;

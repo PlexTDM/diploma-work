@@ -34,14 +34,16 @@ const Profile = () => {
         <Typography variant="h3" className="!mx-auto w-min !mt-4">
           {user && user.username}
         </Typography>
+        {user && (user.role === "admin" || user.role === 'writer') && (
+          <Button
+            sx={[{ display: "relative", backgroundColor: "#407a59", ":hover": { backgroundColor: "aqua", color: '#c32bf5', fontWeight: 'bold' } },
+            (theme) => theme.palette.mode === "dark" ? { color: "white" } : { color: "black" }]}
+            onClick={() => navigate('/write')}>
+            Write Articles
+          </Button>
+        )}
         <Button
-          sx={[{ display: "relative", backgroundColor: "#407a59", ":hover": { backgroundColor: "aqua", color:'#c32bf5', fontWeight:'bold' } },
-          (theme) => theme.palette.mode === "dark" ? { color: "white" } : { color: "black" }]}
-          onClick={()=>navigate('/write')}>
-          Write Articles
-        </Button>
-        <Button
-          sx={[{ display: "relative", backgroundColor: "#ad3737",marginTop:'10px', ":hover": { backgroundColor: "red" } },
+          sx={[{ display: "relative", backgroundColor: "#ad3737", marginTop: '10px', ":hover": { backgroundColor: "red" } },
           (theme) => theme.palette.mode === "dark" ? { color: "white" } : { color: "black" }]}
           onClick={signOut}>
           Sign Out

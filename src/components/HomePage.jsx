@@ -46,7 +46,7 @@ const HomePage = () => {
     }
     const types = ['politics', 'sport', 'health', 'tech'];
     types.forEach(type => {
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         sendReq(type, i);
       }
     })
@@ -56,6 +56,7 @@ const HomePage = () => {
     const types = ['politics', 'sport', 'health', 'tech'];
     // putting same type in same array
     let newArr = [];
+    
     typeArr.sort((a, b) => a._id - b._id);
     types.map((type) => {
       let arr = [];
@@ -68,46 +69,48 @@ const HomePage = () => {
       if (arr.length > 0) newArr.push(arr);
       return newArr;
     })
+    // sort new array by _id, newest first
+    newArr.map((arr) => {
+      return arr.sort((a, b) => b.data._id.toString().localeCompare(a.data._id.toString()));
+    })
     return newArr;
   }
 
   const sortedTypes = sortByType();
+  const mnTypes = ['Улс Төр','Спорт', 'Эрүүл Мэнд', 'Технологи'];
 
   return (
     <Paper sx={{ maxWidth: '100%', minHeight: 'calc(100vh - 68px)' }} className='flex justify-center'>
       {loading && <LoadingCircle />}
-      <Stack direction='column' className='flex w-full items-center cursor-pointer'>
+      <Stack direction='column' className='flex w-full items-center'>
         {data && data[0] &&
-          <div className="w-[500px] m-4">
-            <Swiper autoplay loop navigation pagination={{ clickable: true }} className='flex items-center'>
+          <div className="max-w-[500px] sm:max-w-full max-h-[400px] object-cover m-4">
+            <Swiper autoplay={{delay:3000, disableOnInteraction: false}} loop navigation pagination={{ clickable: true }} className='flex items-center cursor-pointer'>
               {data.map((item, i) => (
                 <SwiperSlide key={i} onClick={() => navigate('/article/' + item._id)} className='p-4'>
-                  <img src={item.poster && typeof item.poster === "string" ? item.poster : noImage} alt={item.title} />
+                  <img src={item.poster && typeof item.poster === "string" ? item.poster : noImage} alt={item.title} className='max-h-[380px]' />
                   <p className="legend">{item.title.length > 90 ? item.title.substring(0, 90) + '...': item.title}</p>
                 </SwiperSlide>
               ))}
             </Swiper >
           </div>
-
         }
-
-        {/* <div className="ml-8"> */}
-        <Divider />
+        
         {sortedTypes && sortedTypes.map((type, i) => (
           <Fragment key={i}>
-            <Grid container spacing={2} className='p-2 !mt-2 min-h-[8rem] h-auto max-w-[100%]'>
+          <Divider textAlign="left" className="w-full">{mnTypes[i]}</Divider>
+            <Grid container spacing={2} className='px-4 !mt-2 min-h-[8rem] h-auto max-w-[100%] !grid grid-cols-4 sm:grid-cols-1'>
               {type.map(data => {
                 data = data.data
                 return (
-                  <div key={data._id} xs={4} className='flex flex-col h-62 w-[25%] overflow-hidden'>
+                  <div key={data._id} xs={4} className='flex p-2 flex-col h-62 overflow-hidden' onClick={()=>navigate('/article/'+data._id)}>
                     <div className="w-full min-h-[100%] relative p-1 ">
-                      {typeof data.poster === 'string' && <img src={data.poster} alt={data.title} className='w-full h-auto hp-img' />}
-                      <span>{data.title.substring(0, 100) + '...'}</span>
+                      {typeof data.poster === 'string' && <img src={data.poster} alt={data.title} className='max-h-[200px] w-full object-cover hp-img' />}
+                      <span>{data.title.length >= 80 ? data.title.substring(0, 70) + '...' : data.title}</span>
                     </div>
                   </div>)
               })}
             </Grid>
-            <Divider />
           </Fragment>
         ))}
       </Stack>
