@@ -2,14 +2,15 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { AppBar, Toolbar, Paper, Divider, IconButton, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import NavButton from './Button';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import UserIcon from '@mui/icons-material/PersonOutline';
 import SearchIcon from '@mui/icons-material/Search';
 // import logo from '../assets/logo-light.png';
 // import darkLogo from '../assets/logo-dark.png';
 import { useTheme } from '@mui/material/styles';
 import ThemeSwitch from './ThemeSwitch';
-import { useSelector } from 'react-redux';
+import { UserContext } from './App';
+// import { useSelector } from 'react-redux';
 
 const Nav = (props) => {
   const theme = useTheme();
@@ -21,8 +22,10 @@ const Nav = (props) => {
   // const isXs = useMediaQuery('(max-width:320px)');
   const [search, setSearch] = useState('');
 
-  const userData = useSelector(state => state.userData);
-  const { user } = userData;
+  // const userData = useSelector(state => state.userData);
+  // const { user } = userData;
+
+  const user = useContext(UserContext);
 
   const toHome = () => {
     navigate('/home');
@@ -62,8 +65,7 @@ const Nav = (props) => {
         <Toolbar className='!flex !justify-center'>
 
           <NavButton onClick={toHome} sx={{paddingY:'0'}}>
-            {/* {<img src={theme.palette.mode === 'dark' ? logo : darkLogo} alt='logo' />}
-             */}
+            {/* {<img src={theme.palette.mode === 'dark' ? logo : darkLogo} alt='logo' />} */}
              <div id="earth"></div>
           </NavButton>
 
@@ -105,7 +107,7 @@ const Nav = (props) => {
           {isSm && <NavButton hoverColor='#1188bb' title='Бусад' onClick={handleClick} />}
 
           <div className='mx-4 relative w-max !p-0'>
-            {!isSm ? <input type="text" placeholder="Search" className='search w-28 border-2 text-black pr-6' value={search} onChange={(e) => setSearch(e.target.value)}
+            {!isSm ? <input type="text" placeholder="Search" className='search w-28 border-2 border-black text-black pr-6' value={search} onChange={(e) => setSearch(e.target.value)}
               onKeyPress={e => {
                 if (e.key !== 'Enter') return
                 handleSearch()

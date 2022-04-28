@@ -24,7 +24,6 @@ const Login = () => {
   const { data, error, loading } = loginFetch;
 
   useEffect(() => {
-
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
       dispatch(getUserData(data._id));
@@ -32,8 +31,8 @@ const Login = () => {
     }
     error&&setErrorOpen([true, error]);
   }, [navigate, data, error, dispatch]);
-  useEffect(() => {
-    
+
+  useEffect(() => {  
     return ()=>{
       dispatch({type: LOGIN_RESET});
     }

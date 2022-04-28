@@ -1,14 +1,13 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { Paper, TextField, MenuItem, Button, Stack, Menu, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Editor } from '@tinymce/tinymce-react';
-// import tinymce from 'tinymce/tinymce';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import LoadingCircle from './LoadingCircle';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { UserContext } from './App';
 
 const TinyMCE = props => {
   const theme = useTheme();
@@ -26,9 +25,9 @@ const TinyMCE = props => {
 
   const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
-  const swal = withReactContent(Swal)
-  const userData = useSelector(state => state.userData);
-  const { user } = userData;
+  const swal = withReactContent(Swal);
+
+  const user = useContext(UserContext);
   const update = props.update;
 
   const resizeImage = (file, maxSize) => {
@@ -55,9 +54,9 @@ const TinyMCE = props => {
       return canvas.toDataURL('image/png');
     };
     return new Promise(resolve => {
-      reader.onload = function (readerEvent) {
+      reader.onload = e => {
         image.onload = () => resolve(resize());
-        image.src = readerEvent.target.result;
+        image.src = e.target.result;
       };
       reader.readAsDataURL(file);
     });
@@ -100,7 +99,7 @@ const TinyMCE = props => {
       if (title.trim() === '') {
         return alert('Гарчигаа оруулна уу');
       }
-      if(poster.trim() === '') {
+      if (poster.trim() === '') {
         return alert('Зурагаа оруулна уу');
       }
       const userlocal = JSON.parse(localStorage.getItem('user'));
@@ -124,17 +123,17 @@ const TinyMCE = props => {
           swal.fire('Алдаа гарлаа', '', 'error')
         }
       } else {
-        await axios.post(api, {
+        await axios.post(api + '/upload', {
           title: title,
           article: editorContent,
           author: user._id,
           type: type,
           poster: poster
-        }, options).then(res=>{swal.fire('Амжилттай Нийтлэлээ', '', 'success');console.log(res)})
-        .catch(err => {
-          console.log(err);
-          swal.fire('Алдаа гарлаа', '', err)
-        })
+        }, options).then(res => { swal.fire('Амжилттай Нийтлэлээ', '', 'success'); console.log(res) })
+          .catch(err => {
+            console.log(err, err.response);
+            swal.fire('Алдаа гарлаа', err, 'error')
+          })
       }
     }
   };
@@ -146,17 +145,17 @@ const TinyMCE = props => {
       <Menu
         anchorEl={anchorEl}
         open={open}
-        onClose={()=>setAnchorEl(null)}
+        onClose={() => setAnchorEl(null)}
         // onClick={()=>setAnchorEl(null)}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Button 
-          variant="contained" sx={{ height: 50, width: 150, ml:2 }} component="label">Choose File<input type="file" hidden accept="image/*" onChange={setImg} />
+        <Button
+          variant="contained" sx={{ height: 50, width: 150, ml: 2 }} component="label">Choose File<input type="file" hidden accept="image/*" onChange={e => { setImg(e); setAnchorEl(null) }} />
         </Button>
-        <Divider sx={{my:2}}/>
-        <TextField type='url' variant='filled' hiddenLabel onChange={e=>setUrlPoster(e.target.value)} size="small" placeholder='URL'/>
-        <Button variant="contained" sx={{ height: 'min-content', width: 150, ml:2 }} onClick={()=>{setPoster(urlPoster);setAnchorEl(null)}}>Save</Button>
+        <Divider sx={{ my: 2 }} />
+        <TextField type='url' variant='filled' hiddenLabel onChange={e => setUrlPoster(e.target.value)} size="small" placeholder='URL' />
+        <Button variant="contained" sx={{ height: 'min-content', width: 150, ml: 2 }} onClick={() => { setPoster(urlPoster); setAnchorEl(null) }}>Save</Button>
       </Menu>
       <Stack spacing={2} direction='row'>
         <TextField
@@ -178,7 +177,7 @@ const TinyMCE = props => {
           color="secondary"
         />
 
-        <Button variant="contained" className='ml-4 h-min' onClick={e=>setAnchorEl(e.currentTarget)}>{poster?'Change Poster':'Set Poster'}</Button>
+        <Button variant="contained" className='ml-4 h-min' onClick={e => setAnchorEl(e.currentTarget)}>{poster ? 'Change Poster' : 'Set Poster'}</Button>
         {poster && <img className='max-w-[50%]' alt='poster' src={poster} />}
       </Stack>
 
@@ -219,7 +218,7 @@ const TinyMCE = props => {
         }}
         className='mt-4'
       />
-      <Button onClick={log} disabled={loading?true:false} sx={{ border: '1px solid gray', marginX: 'auto', width: 'max-content', display: 'block', marginTop: 5 }}>
+      <Button onClick={log} disabled={loading ? true : false} sx={{ border: '1px solid gray', marginX: 'auto', width: 'max-content', display: 'block', marginTop: 5 }}>
         {update ? 'Засах' : 'Нийтлэх'}
       </Button>
     </Paper>

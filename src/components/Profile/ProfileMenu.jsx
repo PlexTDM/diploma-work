@@ -1,5 +1,5 @@
 import { CLEAR_USER_ARTICLES, GET_USERS_RESET } from "../constants/constants";
-import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup, Divider } from "@mui/material";
+import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup, Divider, Pagination } from "@mui/material";
 import withReactContent from "sweetalert2-react-content";
 import { getUserArticle, getUserData } from "../actions/userActions";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,9 +15,9 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 const TabPanel = (props) => {
-  const { children, value, index } = props;
+  const { children, value, index, className } = props;
 
-  return <div>{value === index && <Box sx={{ p: 2 }}>{children}</Box>}</div>;
+  return <div>{value === index && <Box sx={{ p: 2 }} className={className}>{children}</Box>}</div>;
 };
 
 const FullWidthTabs = (props) => {
@@ -25,8 +25,8 @@ const FullWidthTabs = (props) => {
   const dispatch = useDispatch();
   const user = props.user;
   const swal = withReactContent(Swal);
-  const { data } = useSelector((state) => state.userArticles);
-  const updateDatas = useSelector((state) => state.updateUsers);
+  const { data: articlesData, count: articlesCount } = useSelector(state => state.userArticles);
+  const updateDatas = useSelector(state => state.updateUsers);
   const { loading: updateLoading, data: updateData } = updateDatas;
 
   const [value, setValue] = useState(0);
@@ -37,14 +37,24 @@ const FullWidthTabs = (props) => {
   const [password, setPassword] = useState(""); //user.password
   const [comfirmPassword, setComfirmPassword] = useState("");
   const [avatar, setAvatar] = useState(user.avatar);
-  const [people, setPeople] = useState(data);
+  const [page, setPage] = useState(1);
   const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
   useEffect(() => {
     if (!user) return navigate("/login");
-    data??dispatch(getUserArticle(props.user._id));
-    setPeople(data);
-  }, [user, navigate, data, dispatch, props]);
+    // articlesData ??
+    dispatch(getUserArticle(props.user._id, page-1));
+    console.log(page);
+  }, [user, navigate, dispatch, props, page]);
+  console.log('count',articlesCount);
+  useEffect(() => {
+    const swal = withReactContent(Swal);
+    updateData && swal.fire({
+      title: "Updated",
+      text: updateData.message,
+      icon: "success",
+    }) && dispatch(getUserData(user._id));
+  }, [updateData, dispatch, user._id]);
 
   useEffect(() => {
     return () => {
@@ -84,7 +94,7 @@ const FullWidthTabs = (props) => {
       return canvas.toDataURL('image/png');
     };
     return new Promise(resolve => {
-      reader.onload = e=>{
+      reader.onload = e => {
         image.onload = () => resolve(resize());
         image.src = e.target.result;
       };
@@ -94,7 +104,7 @@ const FullWidthTabs = (props) => {
   const toBase64 = (e) => {
     const reader = new FileReader();
     reader.onload = () => {
-      resizeImage(e.target.files[0],500).then(res => {
+      resizeImage(e.target.files[0], 500).then(res => {
         setAvatar(res);
       })
     };
@@ -126,65 +136,51 @@ const FullWidthTabs = (props) => {
     };
     console.log(formData);
     dispatch(updateUsers(user._id, formData));
-    updateData &&
-      swal.fire({
-        title: "updated",
-        text: updateData.message,
-        icon: "success",
-      }) && dispatch(getUserData(user._id));
   };
 
   const handleDelete = id => {
     console.log(user)
-    swal
-      .fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        confirmButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-        showCancelButton: true,
-        cancelButtonColor: "#3085d6",
-        didOpen: () => swal.getCancelButton().focus(),
-      })
-      .then(async (result) => {
-        if (result.value) {
-          swal.fire("Устгагдлаа!", "Таны Нийтлэл Устгагдлаа!", "success");
-          const options = {
-            headers: { Authorization: "Bearer " + user.access_token },
-          };
-          try {
-            await axios.delete(api + "/delete/" + id, options);
-            console.log("deleted");
-          } catch (error) {
-            swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong!",
-            });
-          }
+    swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      showCancelButton: true,
+      cancelButtonColor: "#3085d6",
+      didOpen: () => swal.getCancelButton().focus(),
+    }).then(async result => {
+      if (result.value) {
+        swal.fire("Устгагдлаа!", "Таны Нийтлэл Устгагдлаа!", "success");
+        const options = {
+          headers: { Authorization: "Bearer " + user.access_token },
+        };
+        try {
+          await axios.delete(api + "/delete/" + id, options).then(console.log("deleted"))
+        } catch (error) {
+          swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
         }
-      });
+      }
+    });
   };
 
   return (
     <Box
       sx={{ bgcolor: "background.paper" }}
-      className="w-[500px] md:w-auto p-2"
-    >
+      className={`w-[500px] md:w-auto p-2`}>
       <AppBar position="relative" className="w-full">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          textColor="inherit"
-          variant="fullWidth"
-          scrollButtons="auto"
-        >
+        <Tabs value={value} onChange={handleChange} textColor="inherit" variant="fullWidth" scrollButtons="auto">
           <Tab label="Profile Info" />
           {props.user && props.user.role === "admin" && (
             <Tab label="Admin Control" />
           )}
-          <Tab label="Articles" />
+          {props.user && (props.user.role === 'admin' || props.user.role === 'writer') &&
+            <Tab label="Articles" />
+          }
         </Tabs>
       </AppBar>
 
@@ -192,55 +188,21 @@ const FullWidthTabs = (props) => {
         {updateLoading && <CircularProgress />}
         <Stack direction="column" className="ml-4" spacing={2}>
           <Stack direction="row" spacing={2} className="flex items-center">
-            <Avatar src={avatar} sx={{ width: 128, height: 128 }} variant='square'/>
-            <Button
-              variant="contained"
-              sx={{ height: 50, width: 150 }}
-              component="label"
-            >
+            <Avatar src={avatar} sx={{ width: 128, height: 128 }} variant='square' />
+            <Button variant="contained" sx={{ height: 50, width: 150 }} component="label">
               Upload Image
               <input type="file" hidden accept="image/*" onChange={toBase64} />
             </Button>
           </Stack>
-          <TextField
-            sx={{ color: "text.primary" }}
-            value={username}
-            label="Username"
-            required
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          />
-          <TextField
-            sx={{ color: "text.primary" }}
-            value={email}
-            label="Email"
-            required
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-          <TextField
-            sx={{ color: "text.primary" }}
-            value={number}
-            label="Number"
-            required
-            onChange={(e) => {
-              setNumber(e.target.value);
-            }}
-          />
+          <TextField sx={{ color: "text.primary" }} value={username} label="Username" required onChange={e => setUsername(e.target.value)} />
+          <TextField sx={{ color: "text.primary" }} value={email} label="Email" required onChange={e => setEmail(e.target.value)} />
+          <TextField sx={{ color: "text.primary" }} value={number} label="Number" required onChange={e => setNumber(e.target.value)} />
           <FormGroup>
             <FormControlLabel
               control={
-                <SwitchAndroid
-                  checked={updatePass}
-                  onChange={updatePassHandler}
-                  inputProps={{ "aria-label": "controlled" }}
-                  color="secondary"
-                />
+                <SwitchAndroid checked={updatePass} onChange={updatePassHandler} inputProps={{ "aria-label": "controlled" }} color="secondary" />
               }
-              label="Update Password?"
-            />
+              label="Update Password?" />
           </FormGroup>
           {updatePass ? (
             <>
@@ -276,35 +238,37 @@ const FullWidthTabs = (props) => {
         </TabPanel>
       )}
 
-      <TabPanel value={value} index={2}>
+      {/* TODO: add pagination here */}
+      {props.user && (props.user.role === 'admin' || props.user.role === 'writer') && <TabPanel className='min-h-[500px] relative' value={value} index={2}>
         <div className="relative">
           <IconButton className='!absolute top-[-20px] right-[-15px]' onClick={refreshUsers}><ReplayIcon /></IconButton>
-          {people && people.length !== 0 ? (
-            people.map(item => (
+          {articlesData && articlesData.length !== 0 ? (
+            articlesData.map(item => (
               <Fragment key={item._id}>
-              <div className="flex flex-row relative m-2">
-                <Link className="max-w-[75%]" to={"/article/" + item._id}>
-                  {item.title}
-                </Link>
-                <div className="flex flex-row absolute right-0">
-                  <Link to={"/update/" + item._id}>
-                    <IconButton>
-                      <EditIcon />
-                    </IconButton>
+                <div className="flex flex-row relative m-2">
+                  <Link className="max-w-[75%]" to={"/article/" + item._id}>
+                    {item.title}
                   </Link>
-                  <IconButton onClick={() => handleDelete(item._id)}>
-                    <DeleteIcon />
-                  </IconButton>
+                  <div className="flex flex-row absolute right-0">
+                    <Link to={"/update/" + item._id} className='group'>
+                      <IconButton>
+                        <EditIcon className="group-hover:fill-green-500"/>
+                      </IconButton>
+                    </Link>
+                    <IconButton onClick={() => handleDelete(item._id)} className='group'>
+                      <DeleteIcon className='group-hover:fill-red-500'/>
+                    </IconButton>
+                  </div>
                 </div>
-              </div>
-              <Divider/>
+                <Divider />
               </Fragment>
             ))
           ) : (
             <div>No Articles</div>
           )}
         </div>
-      </TabPanel>
+        {articlesCount&&<Pagination className="mt-4 absolute bottom-0 right-0 left-0 mx-auto w-max" count={Math.ceil(articlesCount/5)} page={page} onChange={(e,page)=>setPage(page)} shape='rounded' variant="outlined"/>}
+      </TabPanel>}
     </Box>
   );
 };

@@ -1,14 +1,13 @@
 import { Avatar, Paper, Typography, Button } from "@mui/material";
-import { useSelector } from "react-redux";
 import ProfileMenu from "./ProfileMenu";
 import { CLEAR_USER_DATA } from "../constants/constants";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../App';
 
 const Profile = () => {
-  const userData = useSelector((state) => state.userData);
-  const { user } = userData;
+  const user = useContext(UserContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

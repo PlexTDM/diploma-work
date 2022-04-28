@@ -35,7 +35,36 @@ input:-webkit-autofill:active {
   border-radius: 0 !important;
   border-right: 2px solid #e6e6e6 !important;
   margin: 0 !important;
+  -webkit-animation: linear infinite;
+  -webkit-animation-name: run;
+  -webkit-animation-duration: 5s;
+  position: relative !important;
+  transition: all 0.2s ease-in-out !important;
 }
+.navBtn::after {
+  position: absolute;
+  bottom: -4px;
+  height: 4px;
+  content: "";
+  width: 0;
+}
+.navBtn:hover::after {
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+@-webkit-keyframes run {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 0;
+  }
+}
+
 .container {
   max-width: 60%;
   margin-left: auto;

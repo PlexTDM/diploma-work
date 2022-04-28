@@ -5,11 +5,11 @@ import ShowSearch from './ShowSearch';
 const Search = () => {
   const { type } = useParams();
   const [searchData, setSearchData] = useState(null);
-  const limit = 5;
+  const limit = 2;
   useEffect(() => {
     const fetchData = async () => {
       const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
-      const { data } = await axios.get(`${api}/search?type=${type}&limit=${limit}`);
+      const { data } = await axios.get(`${api}/search?type=${type}&limit=${limit}&project=title,poster,body,date`);
       setSearchData(data)
     };
     if (!searchData) fetchData();

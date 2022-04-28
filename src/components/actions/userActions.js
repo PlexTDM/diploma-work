@@ -1,48 +1,69 @@
 import * as constants from "../constants/constants";
 import axios from "axios";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
-export const getUserData = (userId) => async (dispatch) => {
-	const user = JSON.parse(localStorage.getItem("user"));
-	const access_token = user.access_token;
-	await axios.get(api + "/getUser/" + userId, {
+export const getUserData = createAsyncThunk(constants.GET_USER_DATA, async (userId, { dispatch }) => {
+	const { access_token } = JSON.parse(localStorage.getItem("user"));
+	const res = await axios.get(api + "/getUser/" + userId, {
 		headers: {
 			Authorization: "Bearer " + access_token,
 		},
-	}).then(res => {
-		dispatch({
-			type: constants.GET_USER_DATA,
-			status: res.status,
-			payload: res.data,
-		});
-	}).catch(error => {
-		if (error.response) {
-			dispatch({
-				type: constants.GET_USER_DATA_ERROR,
-				message: error.response.data.message,
-				status: error.response.status,
-			});
-		} else if (!error.status) {
-			dispatch({
-				type: constants.GET_USER_DATA_ERROR,
-				message: "Network Error",
-				status: 502,
-			});
-		} else {
-			dispatch({
-				type: constants.GET_USER_DATA_ERROR,
-				message: error.message,
-				status: error.status,
-			});
-		}
-	});
-};
+	})
+	console.log(res)
+	return ({
+		status: res.status,
+		user: res.data.user,
+	})
+	// dispatch({
+	// 	type: constants.GET_USER_DATA,
+	// 	status: res.status,
+	// 	payload: res.data,
+	// });
+});
 
-export const getUserArticle = (userId) => async (dispatch) => {
-	const user = JSON.parse(localStorage.getItem("user"));
-	const access_token = user.access_token;
-	await axios.get(api + "/getUserArticles/" + userId, {
+// import useFetch from "../hooks/useFetch";
+// import { useEffect } from "react";
+
+
+// export const getUserData = (userId) => async (dispatch) => {
+// 	await axios.get(api + "/getUser/" + userId, {
+// 		headers: {
+// 			Authorization: "Bearer " + access_token,
+// 		},
+// 	}).then(res => {
+// 		dispatch({
+// 			type: constants.GET_USER_DATA,
+// 			status: res.status,
+// 			payload: res.data,
+// 		});
+// 	}).catch(error => {
+// 		if (error.response) {
+// 			dispatch({
+// 				type: constants.GET_USER_DATA_ERROR,
+// 				message: error.response.data.message,
+// 				status: error.response.status,
+// 			});
+// 		} else if (!error.status) {
+// 			dispatch({
+// 				type: constants.GET_USER_DATA_ERROR,
+// 				message: "Network Error",
+// 				status: 502,
+// 			});
+// 		} else {
+// 			dispatch({
+// 				type: constants.GET_USER_DATA_ERROR,
+// 				message: error.message,
+// 				status: error.status,
+// 			});
+// 		}
+// 	});
+// };
+
+export const getUserArticle = (userId, skips) => async (dispatch) => {
+	const { access_token } = JSON.parse(localStorage.getItem("user"));
+	await axios.get(`${api}/getUserArticles/${userId}?skips=${skips}&limit=5`, {
 		headers: {
 			Authorization: "Bearer " + access_token,
 		},
@@ -50,7 +71,7 @@ export const getUserArticle = (userId) => async (dispatch) => {
 		dispatch({
 			type: constants.GET_USER_ARTICLES,
 			status: res.status,
-			payload: res.data.message,
+			payload: res.data,
 		});
 	}).catch((error) => {
 		if (error.response) {
@@ -76,9 +97,8 @@ export const getUserArticle = (userId) => async (dispatch) => {
 };
 
 export const getUsers = (page) => async (dispatch) => {
+	const { access_token } = JSON.parse(localStorage.getItem("user"));
 	const skips = page * 5;
-	const user = JSON.parse(localStorage.getItem("user"));
-	const access_token = user.access_token;
 	dispatch({ type: constants.GET_USERS_REQ });
 	await axios.get(api + "/getUsers/" + skips, {
 		headers: {

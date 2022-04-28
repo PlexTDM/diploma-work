@@ -1,24 +1,17 @@
-import { useState } from 'react';
 import { Typography, IconButton } from '@mui/material';
 
 const Button = props => {
-  const [isHover, setIsHover] = useState(false);
-
   return (
+    // className={`${props.noborder ? '' : 'navBtn'} h-full`}
     <>
       <IconButton color='primary' onClick={props.onClick}
-        className={props.noborder ? '' : 'navBtn'}
-        onMouseEnter={()=>setIsHover(true)}
-        onMouseLeave={()=>setIsHover(false)}
-        sx={[{height:'100%', borderRadius:''},isHover ? {borderBottom:`4px solid ${props.hoverColor || 'transparent'}`} : {borderBottom:'4px solid transparent'},
-        props.sx
-      ]}
-      >
+        className='navBtn h-full' sx={[{ ...props.sx },{
+          ':after': {backgroundColor: props.hoverColor,}
+        }]}>
         {props.children}
         <Typography color="inherit" component="div" className='text-base'>
           {props.title}
-        </Typography> 
-      {/* <span ></span> */}
+        </Typography>
       </IconButton>
     </>
   )

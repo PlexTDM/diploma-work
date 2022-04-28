@@ -1,7 +1,6 @@
-import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-
+import { configureStore } from '@reduxjs/toolkit';
 import { loginUsers, registerUsers, updateUsers } from './reducers/authReducers';
 import { userData, userArticle, getUsers, homePageData } from './reducers/userData';
 
@@ -14,12 +13,9 @@ const reducers = combineReducers({
     getUsers: getUsers,
     updateUsers: updateUsers
 });
-
-const middleware = [thunk];
-
-const store = createStore(
-    reducers,
-    composeWithDevTools(applyMiddleware(...middleware))
-)
+const store = configureStore({
+    reducer: reducers,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+})
 
 export default store;

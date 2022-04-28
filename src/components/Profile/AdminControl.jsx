@@ -60,6 +60,7 @@ const Modal = props => {
     dispatch(updateUsers(user._id, formData))
   }
 
+  // TODO: faster data retrieving and fetching on click modal
   return (
     <Dialog open={open} onClose={close}
       className='flex justify-center items-center !z-[5]'>

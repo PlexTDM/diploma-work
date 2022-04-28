@@ -21,14 +21,14 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState([false, null]);
 
   const dispatch = useDispatch();
   const registerFetch = useSelector(store => store.register);
   const { loading, data, error, status } = registerFetch;
 
   useEffect(() => {
-    error && setErrorOpen(true);
+    error && setErrorOpen([true, error]);
   }, [error]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Register = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (email.trim() === '' || password.trim() === '' || username.trim() === '' || number.trim() === '') {
-      return setErrorOpen(true);
+      return setErrorOpen([true, null]);
     };
     const formData = {
       email: email,
@@ -60,7 +60,7 @@ const Register = () => {
   };
 
   const closeErr = () => {
-    setErrorOpen(false)
+    setErrorOpen([false, null]);
   }
 
   const bgstyle = {
@@ -81,7 +81,8 @@ const Register = () => {
       {loading && <LoadingCircle />}
       <Paper elevation={24} className={`!mx-auto ml-32 lg:ml-0 p-[1rem] lg:w-[65%] w-[30%] mt-[10%]`}>
         <Form onSubmit={submitHandler}>
-          {errorOpen && <ErrAlert close={closeErr} value={error} />}
+          {errorOpen[0] && <ErrAlert close={closeErr} message={errorOpen[1]} />}
+          {errorOpen[0] && console.log(errorOpen[1])}
           <Input
             onChange={(e) => setUsername(e.target.value)}
             value={username}

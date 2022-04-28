@@ -17,6 +17,7 @@ export const registerUsers = (formData) => async (dispatch) => {
   }).catch(error => {
     if (error.response) {
       // if server send response
+      console.log(error.response.data.message)
       dispatch({
         type: constants.REG_USERS_ERROR,
         message: error.response.data.message,
@@ -75,8 +76,7 @@ export const loginUsers = (formData) => async (dispatch) => {
 };
 
 export const updateUsers = (_id, formData) => async (dispatch) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const access_token = user.access_token;
+  const { access_token } = JSON.parse(localStorage.getItem("user"));
   dispatch({
     type: constants.UPDATE_USERS_REQ,
   });
