@@ -9,7 +9,7 @@ import LoadingCircle from '../LoadingCircle';
 import blueskybg from '../../assets/blueskybg.jfif';
 import ErrAlert from './ErrAlert';
 import { LOGIN_RESET } from '../constants/constants';
-import { getUserData } from '../actions/userActions';
+import { getUserData } from '../features/getUserData';
 import { loginUsers } from '../actions/authActions';
 
 const Login = () => {

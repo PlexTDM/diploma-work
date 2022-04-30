@@ -1,6 +1,5 @@
 import { Avatar, Paper, Typography, Button } from "@mui/material";
 import ProfileMenu from "./ProfileMenu";
-import { CLEAR_USER_DATA } from "../constants/constants";
 import { useDispatch } from "react-redux";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,19 +11,19 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const signOut = () => {
-    dispatch({ type: CLEAR_USER_DATA });
+    dispatch({ type: 'userData/clear' });
     localStorage.removeItem('user');
     navigate("/login");
   };
 
   useEffect(() => {
     const signOut = () => {
-      dispatch({ type: CLEAR_USER_DATA });
+      dispatch({ type: 'userData/clear' });
       localStorage.removeItem('user');
       navigate("/login");
     };
     if (!localStorage.getItem('user')) return signOut();
-  }, [user, dispatch, navigate]);
+  }, [dispatch, navigate]);
 
   return (
     <Paper className="w-full min-h-[calc(100vh-66px)] flex justify-center p-2 md:flex-col">

@@ -1,7 +1,8 @@
-import { CLEAR_USER_ARTICLES, GET_USERS_RESET } from "../constants/constants";
+import { GET_USERS_RESET, UPDATE_USERS_RESET } from "../constants/constants";
 import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup, Divider, Pagination } from "@mui/material";
 import withReactContent from "sweetalert2-react-content";
-import { getUserArticle, getUserData } from "../actions/userActions";
+import { getUserArticles } from "../features/getUserArticles";
+import { getUserData } from '../features/getUserData';
 import { useSelector, useDispatch } from "react-redux";
 import { updateUsers } from "../actions/authActions";
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -25,9 +26,8 @@ const FullWidthTabs = (props) => {
   const dispatch = useDispatch();
   const user = props.user;
   const swal = withReactContent(Swal);
-  const { data: articlesData, count: articlesCount } = useSelector(state => state.userArticles);
-  const updateDatas = useSelector(state => state.updateUsers);
-  const { loading: updateLoading, data: updateData } = updateDatas;
+  const { articles: userArticles, count: articlesCount } = useSelector(state => state.userArticles);
+  const { loading: updateLoading, data: updateData } = useSelector(state => state.updateUsers);
 
   const [value, setValue] = useState(0);
   const [username, setUsername] = useState(user.username);
@@ -42,23 +42,20 @@ const FullWidthTabs = (props) => {
 
   useEffect(() => {
     if (!user) return navigate("/login");
-    // articlesData ??
-    dispatch(getUserArticle(props.user._id, page-1));
-    console.log(page);
+    dispatch(getUserArticles({userId:props.user._id, skips:page - 1}));
   }, [user, navigate, dispatch, props, page]);
-  console.log('count',articlesCount);
   useEffect(() => {
     const swal = withReactContent(Swal);
     updateData && swal.fire({
       title: "Updated",
       text: updateData.message,
       icon: "success",
-    }) && dispatch(getUserData(user._id));
+    }) && dispatch(getUserData(user._id)) && dispatch({ type: UPDATE_USERS_RESET });
   }, [updateData, dispatch, user._id]);
 
   useEffect(() => {
     return () => {
-      dispatch({ type: CLEAR_USER_ARTICLES });
+      dispatch({ type: 'userArticles/clear' });
       dispatch({ type: GET_USERS_RESET });
     };
   }, [dispatch, props]);
@@ -111,11 +108,11 @@ const FullWidthTabs = (props) => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  const refreshUsers = () => dispatch(getUserArticle(props.user._id))
+  const refreshUsers = () => dispatch(getUserArticles(props.user._id))
 
   const handleUpdate = () => {
     let pass;
-    if (updatePass) {
+    if (updatePass && password.trim() !== '') {
       if (password !== comfirmPassword) {
         swal.fire({
           title: "Password not match",
@@ -126,6 +123,7 @@ const FullWidthTabs = (props) => {
     } else {
       pass = user.password;
     }
+    if (username.trim() === '' || email.trim() === '' || number.trim() === '') return swal.fire('Бүх талбаруудыг бөглөнө үү!')
     const formData = {
       username: username,
       email: email,
@@ -139,7 +137,6 @@ const FullWidthTabs = (props) => {
   };
 
   const handleDelete = id => {
-    console.log(user)
     swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -233,7 +230,7 @@ const FullWidthTabs = (props) => {
       </TabPanel>
 
       {props.user && props.user.role === "admin" && (
-        <TabPanel value={value} index={1}>
+        <TabPanel className='relative min-h-[500px]' value={value} index={1}>
           <AdminControl user={user} />
         </TabPanel>
       )}
@@ -242,8 +239,8 @@ const FullWidthTabs = (props) => {
       {props.user && (props.user.role === 'admin' || props.user.role === 'writer') && <TabPanel className='min-h-[500px] relative' value={value} index={2}>
         <div className="relative">
           <IconButton className='!absolute top-[-20px] right-[-15px]' onClick={refreshUsers}><ReplayIcon /></IconButton>
-          {articlesData && articlesData.length !== 0 ? (
-            articlesData.map(item => (
+          {userArticles && userArticles.length !== 0 ? (
+            userArticles.map(item => (
               <Fragment key={item._id}>
                 <div className="flex flex-row relative m-2">
                   <Link className="max-w-[75%]" to={"/article/" + item._id}>
@@ -252,11 +249,11 @@ const FullWidthTabs = (props) => {
                   <div className="flex flex-row absolute right-0">
                     <Link to={"/update/" + item._id} className='group'>
                       <IconButton>
-                        <EditIcon className="group-hover:fill-green-500"/>
+                        <EditIcon className="group-hover:fill-green-500" />
                       </IconButton>
                     </Link>
                     <IconButton onClick={() => handleDelete(item._id)} className='group'>
-                      <DeleteIcon className='group-hover:fill-red-500'/>
+                      <DeleteIcon className='group-hover:fill-red-500' />
                     </IconButton>
                   </div>
                 </div>
@@ -267,7 +264,7 @@ const FullWidthTabs = (props) => {
             <div>No Articles</div>
           )}
         </div>
-        {articlesCount&&<Pagination className="mt-4 absolute bottom-0 right-0 left-0 mx-auto w-max" count={Math.ceil(articlesCount/5)} page={page} onChange={(e,page)=>setPage(page)} shape='rounded' variant="outlined"/>}
+        {articlesCount && <Pagination className="mt-4 absolute bottom-0 right-0 left-0 mx-auto w-max" count={Math.ceil(articlesCount / 5)} page={page} onChange={(e, page) => setPage(page)} shape='rounded' variant="outlined" />}
       </TabPanel>}
     </Box>
   );

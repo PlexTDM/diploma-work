@@ -11,8 +11,8 @@ import Search from "./Search/Search";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
 import Profile from "./Profile/Profile";
-import { getUserData } from "./actions/userActions";
-import { useDispatch } from "react-redux";
+import { getUserData } from './features/getUserData';
+import { useDispatch, useSelector } from "react-redux";
 import HomePage from "./Home/HomePage";
 import { createContext } from "react";
 
@@ -28,18 +28,15 @@ const ReDiRecT = () => {
 const App = () => {
   const [mode, setMode] = useState("dark");
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState(null);
+  const userData = useSelector(state => state.userData).user;
+  // const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    console.log(userData)
-    if (userData) return;
     let localdata = localStorage.getItem("user");
     if (!localdata) return;
     localdata = JSON.parse(localdata);
-    dispatch(getUserData(localdata._id)).then((res) => {
-      setUserData(res.payload.user);
-    })
-  }, [userData, dispatch]);
+    dispatch(getUserData(localdata._id))
+  }, [dispatch]);
 
   const ToggleTheme = () => {
     setMode(mode === "light" ? "dark" : "light");

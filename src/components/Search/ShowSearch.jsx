@@ -40,7 +40,7 @@ const ShowSearch = props => {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-    if (days > 0) return `${days} минутын өмнө`;
+    if (days > 0) return `${days} өдрийн өмнө`;
     if (hours > 0) return `${hours} цагийн өмнө`;
     if (minutes > 0) return `${minutes} минутын өмнө`;
     if (seconds > 0) return `${seconds} секундын өмнө`;

@@ -16,23 +16,23 @@ const Modal = props => {
   const [avatar, setAvatar] = useState(user.avatar);
   const [role, setRole] = useState(user.role);
   const dispatch = useDispatch();
-  const response = useSelector(state => state.updateUsers);
-  const { loading, data } = response;
+  const { loading, data } = useSelector(state => state.updateUsers);
 
   const swal = withReactContent(Swal);
 
   useEffect(() => {
     if (!data) return
+    const swal = withReactContent(Swal);
+
     swal.fire({
       title: 'User updated successfully',
       text: data.message,
       icon: 'success',
       confirmButtonText: 'OK'
-    })
-    .then(() => {
+    }).then(() => {
       dispatch({ type: UPDATE_USERS_RESET });
     })
-  },[data, swal, dispatch])
+  }, [data, dispatch])
 
   const toBase64 = e => {
     const reader = new FileReader();
@@ -102,8 +102,7 @@ const Modal = props => {
 const Admin = () => {
 
   const dispatch = useDispatch();
-  const usersData = useSelector(state => state.getUsers);
-  const { users, loading, count } = usersData;
+  const { users, loading, count } = useSelector(state => state.getUsers);
   const center = 'flex items-center ';
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(0);
@@ -123,24 +122,25 @@ const Admin = () => {
   }, [dispatch])
 
   return (
-    <Stack spacing={2}>
-
-      {loading && !users && <CircularProgress />}
-      {users && users.map(user => {
-        return (
-          <Stack key={user._id}>
-            <Stack direction='row' spacing={1} onClick={() => { openM(user._id) }} className='cursor-pointer'>
-              <Avatar src={user.avatar} />
-              <div className={center}>{user.username}</div>
-              <div className={center}>{user.email}</div>
+    <>
+      <Stack spacing={2} className='last:text-slate-300'>
+        {loading && !users && <CircularProgress />}
+        {users && users.map(user => {
+          return (
+            <Stack key={user._id}>
+              <Stack direction='row' spacing={1} onClick={() => { openM(user._id) }} className='cursor-pointer'>
+                <Avatar src={user.avatar} />
+                <div className={center}>{user.username}</div>
+                <div className={center}>{user.email}</div>
+              </Stack>
+              <Modal open={open === user._id} close={close} user={user} />
             </Stack>
-            <Modal open={open === user._id} close={close} user={user} />
-          </Stack>
-        )
-      })}
+          )
+        })}
 
-      <Pagination count={Math.ceil(count / 5) || 1} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
-    </Stack>
+      </Stack>
+      <Pagination className="mt-4 absolute bottom-0 right-0 left-0 mx-auto w-max" count={Math.ceil(count / 5) || 1} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
+    </>
   )
 
 }

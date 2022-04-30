@@ -76,6 +76,7 @@ export const loginUsers = (formData) => async (dispatch) => {
 };
 
 export const updateUsers = (_id, formData) => async (dispatch) => {
+  console.log("updateUsers", _id, formData);
   const { access_token } = JSON.parse(localStorage.getItem("user"));
   dispatch({
     type: constants.UPDATE_USERS_REQ,
