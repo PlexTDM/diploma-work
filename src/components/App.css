@@ -36,7 +36,7 @@ input:-webkit-autofill:active {
   border-right: 2px solid #e6e6e6 !important;
   margin: 0 !important;
   -webkit-animation: linear infinite;
-  -webkit-animation-name: run;
+  /* -webkit-animation-name: run; */
   -webkit-animation-duration: 5s;
   position: relative !important;
   transition: all 0.2s ease-in-out !important;
@@ -147,13 +147,13 @@ input[type="number"] {
   transition-duration: 0.2s;
   opacity: 1;
 }
-#earth {
+/* #earth {
   width: 55px;
   aspect-ratio: 1;
   background: url(https://web.archive.org/web/20150807125159if_/http://www.noirextreme.com/digital/Earth-Color4096.jpg);
   border-radius: 50%;
   background-size: 150px;
-  /* box-shadow: inset 8px 36px 80px 36px rgb(0, 0, 0), inset -6px 0 12px 4px rgba(255, 255, 255, 0.3); */
+    box-shadow: inset 8px 36px 80px 36px rgb(0, 0, 0), inset -6px 0 12px 4px rgba(255, 255, 255, 0.3); 
   animation-name: rotate;
   animation-duration: 10s;
   animation-iteration-count: infinite;
@@ -178,4 +178,5 @@ input[type="number"] {
   to {
     background-position: 610px 0px;
   }
-}
+} 
+*/
