@@ -8,9 +8,8 @@ import Input from './Input';
 import LoadingCircle from '../LoadingCircle';
 import blueskybg from '../../assets/blueskybg.jfif';
 import ErrAlert from './ErrAlert';
-import { LOGIN_RESET } from '../constants/constants';
 import { getUserData } from '../features/getUserData';
-import { loginUsers } from '../actions/authActions';
+import { login } from '../features/login';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +33,8 @@ const Login = () => {
 
   useEffect(() => {  
     return ()=>{
-      dispatch({type: LOGIN_RESET});
+      console.log('clearing loginFetch');
+      dispatch({type: 'login/clear'});
     }
   }, [dispatch]);
 
@@ -49,7 +49,7 @@ const Login = () => {
       email: email,
       password: password
     }
-    dispatch(loginUsers(formData));
+    dispatch(login(formData));
     resetForm();
   };
   const resetForm = () => {

@@ -8,15 +8,18 @@ import LoadingCircle from './LoadingCircle';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { UserContext } from './App';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateArticle } from './features/updateArticle';
+import { uploadArticle } from './features/uploadArticle';
 
 const TinyMCE = props => {
   const theme = useTheme();
   const { id } = useParams();
+  const dispatch = useDispatch();
   const editorRef = useRef(null);
   const [type, setType] = useState(' ');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(false);
   const [poster, setPoster] = useState('');
   const [urlPoster, setUrlPoster] = useState('');
 
@@ -25,10 +28,32 @@ const TinyMCE = props => {
 
   const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
-  const swal = withReactContent(Swal);
-
   const user = useContext(UserContext);
   const update = props.update;
+
+  const { data, loading, error } = useSelector(state => state.updateArticle);
+  const {data:uploadData, loading:uploadLoading, error:uploadError} = useSelector(state => state.uploadArticle);
+
+  useEffect(() => {
+    const swal = withReactContent(Swal);
+    if (data && data.length > 0) swal.fire('Амжилттай засагдлаа', '', 'success');
+  }, [data]);
+
+  useEffect(() => {
+    const swal = withReactContent(Swal);
+    if (error) swal.fire('Алдаа гарлаа', error, 'error')
+  }, [error]);
+
+  useEffect(() => {
+  const swal = withReactContent(Swal);
+    if (uploadData && uploadData.length > 0) swal.fire('Амжилттай Нийтлэлээ', '', 'success');
+    dispatch({type:'uploadArticle/clear'});
+  }, [uploadData, dispatch]);
+
+  useEffect(() => {
+  const swal = withReactContent(Swal);
+    if (uploadError) swal.fire('Алдаа гарлаа', uploadError, 'error');
+  }, [uploadError]);
 
   const resizeImage = (file, maxSize) => {
     let reader = new FileReader();
@@ -91,6 +116,7 @@ const TinyMCE = props => {
   }, [update, id, user, api])
 
   const log = async () => {
+    console.log('loggg')
     if (editorRef.current) {
       const editorContent = editorRef.current.getContent();
       if (type === ' ') {
@@ -102,38 +128,26 @@ const TinyMCE = props => {
       if (poster.trim() === '') {
         return alert('Зурагаа оруулна уу');
       }
-      const userlocal = JSON.parse(localStorage.getItem('user'));
-      const access_token = userlocal.access_token;
-      const options = { headers: { 'Authorization': 'Bearer ' + access_token } };
+      if (editorContent.trim() === '') {
+        return alert('Нийтлэлээ оруулна уу');
+      }
       if (update) {
-        try {
-          setLoading(true);
-          await axios.put(api + '/update/' + id, {
+        dispatch(updateArticle({
+          id: id, formData: {
             title: title,
             type: type,
             body: editorContent,
             poster: poster
-          }, options).then(res => {
-            console.log(res);
-            setLoading(false);
-            swal.fire('Амжилттай засагдлаа', '', 'success')
-          })
-        } catch (err) {
-          setLoading(false);
-          swal.fire('Алдаа гарлаа', '', 'error')
-        }
+          }
+        }));
       } else {
-        await axios.post(api + '/upload', {
+        dispatch(uploadArticle({
           title: title,
           article: editorContent,
           author: user._id,
           type: type,
           poster: poster
-        }, options).then(res => { swal.fire('Амжилттай Нийтлэлээ', '', 'success'); console.log(res) })
-          .catch(err => {
-            console.log(err, err.response);
-            swal.fire('Алдаа гарлаа', err, 'error')
-          })
+        }))
       }
     }
   };
@@ -141,12 +155,11 @@ const TinyMCE = props => {
 
   return user && (user.role === 'writer' || user.role === 'admin') ? (
     <Paper className='p-2 pb-32'>
-      {loading && <LoadingCircle />}
+      {(loading || uploadLoading) && <LoadingCircle />}
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
-        // onClick={()=>setAnchorEl(null)}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
@@ -218,7 +231,7 @@ const TinyMCE = props => {
         }}
         className='mt-4'
       />
-      <Button onClick={log} disabled={loading ? true : false} sx={{ border: '1px solid gray', marginX: 'auto', width: 'max-content', display: 'block', marginTop: 5 }}>
+      <Button onClick={log} disabled={loading || uploadLoading} sx={{ border: '1px solid gray', marginX: 'auto', width: 'max-content', display: 'block', marginTop: 5 }}>
         {update ? 'Засах' : 'Нийтлэх'}
       </Button>
     </Paper>

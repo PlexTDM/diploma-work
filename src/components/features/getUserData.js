@@ -20,7 +20,7 @@ const userDataSlice = createSlice({
         user: null,
     },
     extraReducers: {
-        [getUserData.pending]: (state, action) => { state.loading = true },
+        [getUserData.pending]: state => { state.loading = true },
         [getUserData.fulfilled]: (state, { payload }) => { state.user = payload.user; state.loading = false },
         [getUserData.rejected]: (state, { payload }) => { state.loading = false; state.error = payload },
         'userData/clear': (state) => { state.user = null; state.loading = false; state.error = null },

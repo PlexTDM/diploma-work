@@ -7,6 +7,8 @@ import UserIcon from '@mui/icons-material/PersonOutline';
 import SearchIcon from '@mui/icons-material/Search';
 // import logo from '../assets/logo-light.png';
 // import darkLogo from '../assets/logo-dark.png';
+import logo from '../assets/Vidia.png';
+import darkLogo from '../assets/darkVidia.png';
 import { useTheme } from '@mui/material/styles';
 import ThemeSwitch from './ThemeSwitch';
 import { UserContext } from './App';
@@ -64,9 +66,9 @@ const Nav = (props) => {
       <AppBar position="static" className='!m-0' color='transparent' enableColorOnDark>
         <Toolbar className='!flex !justify-center'>
 
-          <NavButton onClick={toHome} sx={{paddingY:'0'}}>
-            {/* {<img src={theme.palette.mode === 'dark' ? logo : darkLogo} alt='logo' />} */}
-             <div id="earth"></div>
+          <NavButton onClick={toHome} sx={{paddingY:'0', overflow:'hidden'}}>
+            {<img src={theme.palette.mode === 'dark' ? darkLogo : logo} className='h-[66px]' alt='logo' />}
+             {/* <div id="earth"></div> */}
           </NavButton>
 
           {user && user ?
@@ -78,13 +80,8 @@ const Nav = (props) => {
             </NavButton>
           }
 
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          <Menu anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
             {menuItems.map((val, i) => {
               return <MenuItem key={i}>
@@ -107,7 +104,7 @@ const Nav = (props) => {
           {isSm && <NavButton hoverColor='#1188bb' title='Бусад' onClick={handleClick} />}
 
           <div className='mx-4 relative w-max !p-0'>
-            {!isSm ? <input type="text" placeholder="Search" className='search w-28 border-2 border-black text-black pr-6' value={search} onChange={(e) => setSearch(e.target.value)}
+            {!isSm ? <input type="text" placeholder="Хайх" className='search w-28 border-2 border-black text-black pr-6' value={search} onChange={(e) => setSearch(e.target.value)}
               onKeyPress={e => {
                 if (e.key !== 'Enter') return
                 handleSearch()

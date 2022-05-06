@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { registerUsers } from '../actions/authActions';
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button, Paper, InputAdornment } from '@mui/material'
@@ -14,7 +13,7 @@ import blueskybg from '../../assets/blueskybg.jfif';
 import ErrAlert from "./ErrAlert";
 import Input from './Input';
 import LoadingCircle from '../LoadingCircle';
-import { REG_RESET } from '../constants/constants';
+import { register } from '../features/register';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -33,7 +32,7 @@ const Register = () => {
 
   useEffect(() => {
     return () => {
-      dispatch({ type: REG_RESET });
+      dispatch({ type: 'register/clear' });
     };
   }, [dispatch]);
 
@@ -49,7 +48,7 @@ const Register = () => {
       username: username,
       number: number
     }
-    dispatch(registerUsers(formData));
+    dispatch(register(formData));
     resetForm();
   };
   const resetForm = () => {
@@ -61,6 +60,7 @@ const Register = () => {
 
   const closeErr = () => {
     setErrorOpen([false, null]);
+    dispatch({ type: 'register/clear' });
   }
 
   const bgstyle = {
@@ -73,7 +73,7 @@ const Register = () => {
     overflow: 'hidden',
   }
 
-  data && status === 200 && dispatch({ type: REG_RESET });
+  data && status === 200 && dispatch({ type: 'register/clear' });
   data && console.log(data);
 
   return (

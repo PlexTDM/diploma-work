@@ -1,20 +1,30 @@
 import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import { loginUsers, registerUsers, updateUsers } from './reducers/authReducers';
-import { getUsers } from './reducers/userData';
 import homeSlice from './features/homeArticles';
 import userDataSlice from './features/getUserData';
 import userArticlesSlice from './features/getUserArticles';
+import loginSlice from './features/login';
+import registerSlice from './features/register';
+import updateUserSlice from './features/updateUser';
+import getUsersSlice from './features/getUsers';
+import deleteArticleSlice from './features/deleteArticle';
+import updateArticleSlice from './features/updateArticle';
+import uploadArticleSlice from './features/uploadArticle';
 
 const reducers = combineReducers({
-    homePage: homeSlice,
-    userData: userDataSlice,
     userArticles: userArticlesSlice,
-    register: registerUsers,
-    login: loginUsers,
-    getUsers: getUsers,
-    updateUsers: updateUsers,
+    updateUsers: updateUserSlice,
+    userData: userDataSlice,
+    getUsers: getUsersSlice,
+    homePage: homeSlice,
+
+    updateArticle: updateArticleSlice,
+    uploadArticle: uploadArticleSlice,
+    deleteArticle: deleteArticleSlice,
+
+    register: registerSlice,
+    login: loginSlice,
 });
 const store = configureStore({
     reducer: reducers,

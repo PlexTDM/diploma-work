@@ -1,19 +1,23 @@
-import { GET_USERS_RESET, UPDATE_USERS_RESET } from "../constants/constants";
 import { AppBar, Avatar, Tab, Tabs, Box, Button, IconButton, TextField, Stack, CircularProgress, FormControlLabel, FormGroup, Divider, Pagination } from "@mui/material";
-import withReactContent from "sweetalert2-react-content";
-import { getUserArticles } from "../features/getUserArticles";
-import { getUserData } from '../features/getUserData';
-import { useSelector, useDispatch } from "react-redux";
-import { updateUsers } from "../actions/authActions";
 import ReplayIcon from '@mui/icons-material/Replay';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+
+import withReactContent from "sweetalert2-react-content";
+
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, Fragment } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import AdminControl from "./AdminControl";
 import SwitchAndroid from "./SwitchAndroid";
-import { Link, useNavigate } from "react-router-dom";
+
+import { getUserArticles } from "../features/getUserArticles";
+import { updateUser } from "../features/updateUser";
+import { getUserData } from '../features/getUserData';
+import { deleteArticle } from '../features/deleteArticle';
+
 import Swal from "sweetalert2";
-import axios from "axios";
 
 const TabPanel = (props) => {
   const { children, value, index, className } = props;
@@ -21,28 +25,28 @@ const TabPanel = (props) => {
   return <div>{value === index && <Box sx={{ p: 2 }} className={className}>{children}</Box>}</div>;
 };
 
-const FullWidthTabs = (props) => {
+const FullWidthTabs = props => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = props.user;
   const swal = withReactContent(Swal);
   const { articles: userArticles, count: articlesCount } = useSelector(state => state.userArticles);
   const { loading: updateLoading, data: updateData } = useSelector(state => state.updateUsers);
+  const { loading: delLoading, data: delData, error: delError } = useSelector(state => state.deleteArticle);
 
   const [value, setValue] = useState(0);
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   const [number, setNumber] = useState(user.number);
   const [updatePass, setUpdatePass] = useState(false);
-  const [password, setPassword] = useState(""); //user.password
-  const [comfirmPassword, setComfirmPassword] = useState("");
+  const [password, setPassword] = useState(''); //user.password
+  const [comfirmPassword, setComfirmPassword] = useState('');
   const [avatar, setAvatar] = useState(user.avatar);
   const [page, setPage] = useState(1);
-  const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
 
   useEffect(() => {
-    if (!user) return navigate("/login");
-    dispatch(getUserArticles({userId:props.user._id, skips:page - 1}));
+    if (!user) return navigate('login');
+    dispatch(getUserArticles({ userId: props.user._id, skips: page - 1 }));
   }, [user, navigate, dispatch, props, page]);
   useEffect(() => {
     const swal = withReactContent(Swal);
@@ -50,13 +54,13 @@ const FullWidthTabs = (props) => {
       title: "Updated",
       text: updateData.message,
       icon: "success",
-    }) && dispatch(getUserData(user._id)) && dispatch({ type: UPDATE_USERS_RESET });
+    }) && dispatch(getUserData(user._id)) && dispatch({ type: 'updateUser/clear' });
   }, [updateData, dispatch, user._id]);
 
   useEffect(() => {
     return () => {
       dispatch({ type: 'userArticles/clear' });
-      dispatch({ type: GET_USERS_RESET });
+      // dispatch({ type: 'getUsers/clear' });
     };
   }, [dispatch, props]);
 
@@ -108,7 +112,7 @@ const FullWidthTabs = (props) => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  const refreshUsers = () => dispatch(getUserArticles(props.user._id))
+  const refreshUsers = () => dispatch(getUserArticles({ userId: props.user._id, skips: page - 1 }))
 
   const handleUpdate = () => {
     let pass;
@@ -132,8 +136,7 @@ const FullWidthTabs = (props) => {
       avatar: avatar,
       role: user.role,
     };
-    console.log(formData);
-    dispatch(updateUsers(user._id, formData));
+    dispatch(updateUser({id:user._id, formData:formData}));
   };
 
   const handleDelete = id => {
@@ -149,18 +152,20 @@ const FullWidthTabs = (props) => {
     }).then(async result => {
       if (result.value) {
         swal.fire("Устгагдлаа!", "Таны Нийтлэл Устгагдлаа!", "success");
-        const options = {
-          headers: { Authorization: "Bearer " + user.access_token },
-        };
-        try {
-          await axios.delete(api + "/delete/" + id, options).then(console.log("deleted"))
-        } catch (error) {
-          swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Something went wrong!",
-          });
-        }
+        dispatch(deleteArticle(id));
+        console.log(delData, delError, delLoading);
+        // const options = {
+        //   headers: { Authorization: "Bearer " + user.access_token },
+        // };
+        // try {
+        //   await axios.delete(api + "/delete/" + id, options)
+        // } catch (error) {
+        //   swal.fire({
+        //     icon: "error",
+        //     title: "Oops...",
+        //     text: "Something went wrong!",
+        //   });
+        // }
       }
     });
   };
@@ -236,8 +241,10 @@ const FullWidthTabs = (props) => {
       )}
 
       {/* TODO: add pagination here */}
+      {/* user articles section */}
       {props.user && (props.user.role === 'admin' || props.user.role === 'writer') && <TabPanel className='min-h-[500px] relative' value={value} index={2}>
         <div className="relative">
+          {delLoading && <CircularProgress />}
           <IconButton className='!absolute top-[-20px] right-[-15px]' onClick={refreshUsers}><ReplayIcon /></IconButton>
           {userArticles && userArticles.length !== 0 ? (
             userArticles.map(item => (

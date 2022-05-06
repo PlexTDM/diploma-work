@@ -1,9 +1,8 @@
 import { Avatar, Stack, CircularProgress, Pagination, Dialog, TextField, Button, MenuItem } from '@mui/material';
-import { GET_USERS_RESET, UPDATE_USERS_RESET } from '../constants/constants';
 import withReactContent from 'sweetalert2-react-content';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUsers } from '../actions/authActions';
-import { getUsers } from '../actions/userActions';
+import { updateUser } from '../features/updateUser';
+import { getUsers } from '../features/getUsers';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
@@ -30,7 +29,7 @@ const Modal = props => {
       icon: 'success',
       confirmButtonText: 'OK'
     }).then(() => {
-      dispatch({ type: UPDATE_USERS_RESET });
+      dispatch({ type: 'updateUser/clear' });
     })
   }, [data, dispatch])
 
@@ -57,7 +56,7 @@ const Modal = props => {
       avatar: avatar,
       role: role
     }
-    dispatch(updateUsers(user._id, formData))
+    dispatch(updateUser(user._id, formData))
   }
 
   // TODO: faster data retrieving and fetching on click modal
@@ -107,7 +106,7 @@ const Admin = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(0);
   const handlePage = (e, val) => {
-    dispatch({ type: GET_USERS_RESET });
+    // dispatch({ type: GET_USERS_RESET });
     dispatch(getUsers(val - 1));
     setPage(val);
   }
@@ -124,7 +123,7 @@ const Admin = () => {
   return (
     <>
       <Stack spacing={2} className='last:text-slate-300'>
-        {loading && !users && <CircularProgress />}
+        {loading && <CircularProgress />}
         {users && users.map(user => {
           return (
             <Stack key={user._id}>
@@ -139,7 +138,7 @@ const Admin = () => {
         })}
 
       </Stack>
-      <Pagination className="mt-4 absolute bottom-0 right-0 left-0 mx-auto w-max" count={Math.ceil(count / 5) || 1} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
+      <Pagination className="mt-4 absolute bottom-0 right-0 left-0 mx-auto w-max" count={Math.ceil(count / 5)||0} page={page} variant="outlined" shape="rounded" onChange={handlePage} />
     </>
   )
 

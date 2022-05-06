@@ -2,6 +2,7 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { useTheme } from '@emotion/react';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   // moon icon
@@ -53,9 +54,10 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const CustomizedSwitches = (props)=>{
+  const theme = useTheme().palette.mode;
   return (
     <FormControlLabel
-      control={<MaterialUISwitch sx={{ m: 2 }} defaultChecked />}
+      control={<MaterialUISwitch sx={{ m: 2 }} checked={theme==='dark'?true:false} />}
       label=""
       onChange={() => {props.onMouseUp()}}
     />
