@@ -116,7 +116,6 @@ const TinyMCE = props => {
   }, [update, id, user, api])
 
   const log = async () => {
-    console.log('loggg')
     if (editorRef.current) {
       const editorContent = editorRef.current.getContent();
       if (type === ' ') {

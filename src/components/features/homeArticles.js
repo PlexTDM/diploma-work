@@ -3,13 +3,7 @@ import axios from 'axios';
 
 export const getHomeArticles = createAsyncThunk('homepage', async num => {
     const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
-    const { access_token } = JSON.parse(localStorage.getItem("user"));
-
-    const { data } = await axios.get(`${api}/latest/${num}`, {
-        headers: {
-            Authorization: "Bearer " + access_token,
-        },
-    })
+    const { data } = await axios.get(`${api}/latest/${num}`)
     return data;
 });
 

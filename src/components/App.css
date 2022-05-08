@@ -36,7 +36,6 @@ input:-webkit-autofill:active {
   border-right: 2px solid #e6e6e6 !important;
   margin: 0 !important;
   -webkit-animation: linear infinite;
-  /* -webkit-animation-name: run; */
   -webkit-animation-duration: 5s;
   position: relative !important;
   transition: all 0.2s ease-in-out !important;
@@ -53,17 +52,6 @@ input:-webkit-autofill:active {
   transition: all 0.2s ease-in-out;
 }
 
-@-webkit-keyframes run {
-  0% {
-    left: 0;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: 0;
-  }
-}
 
 .container {
   max-width: 60%;

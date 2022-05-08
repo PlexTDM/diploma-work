@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const deleteArticle = createAsyncThunk('homepage', async (id, { rejectWithValue }) => {
+export const deleteArticle = createAsyncThunk('deleteArticle', async (id, { rejectWithValue }) => {
     const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
     const { access_token } = JSON.parse(localStorage.getItem("user"));
 
@@ -18,7 +18,7 @@ export const deleteArticle = createAsyncThunk('homepage', async (id, { rejectWit
 });
 
 const deleteSlice = createSlice({
-    name: 'homepage',
+    name: 'deleteArticle',
     initialState: {
         data: [],
     },
