@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const uploadArticle = createAsyncThunk('uploadArticle', async (formData, { rejectWithValue }) => {
-    console.log('fucking reetartdd', formData)
     const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
     const { access_token } = JSON.parse(localStorage.getItem("user"));
     return await axios.post(api + '/upload', formData, {

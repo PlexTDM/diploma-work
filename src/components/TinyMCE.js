@@ -90,10 +90,7 @@ const TinyMCE = props => {
   const setImg = e => {
     const reader = new FileReader();
     reader.onload = () => {
-      resizeImage(e.target.files[0], 500).then(res => {
-        console.log(reader.result.length, res.length);
-        setPoster(res);
-      })
+      resizeImage(e.target.files[0], 500).then(res => setPoster(res))
     }
     reader.readAsDataURL(e.target.files[0]);
   };
