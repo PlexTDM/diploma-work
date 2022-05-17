@@ -6,7 +6,7 @@ const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000'
 export const updateUser = createAsyncThunk('updateUser',  async (props, { rejectWithValue }) => {
     const { id, formData } = props;
     const { access_token } = JSON.parse(localStorage.getItem("user"));
-    await axios.put(api + "/updateUser/" + id, formData, {
+    return await axios.put(api + "/updateUser/" + id, formData, {
         headers: {
             Authorization: "Bearer " + access_token,
         },
@@ -28,7 +28,7 @@ const updateUserSlice = createSlice({
     extraReducers: {
         [updateUser.pending]: state => { state.loading = true },
         [updateUser.fulfilled]: (state, { payload }) => {
-            state.data = payload?.user;
+            state.data = payload;
             state.loading = false;
         },
         [updateUser.rejected]: (state, action) => { state.loading = false; state.error = action.payload; },

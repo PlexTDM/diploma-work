@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import { Paper, Typography, Stack, Avatar } from '@mui/material';
@@ -9,21 +8,28 @@ const One = () => {
   const { id } = useParams();
   const theme = useTheme();
   const mode = theme.palette.mode;
-  const isSm = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const [article, setArticle] = useState('');
   const [author, setAuthor] = useState('');
+
+  const dateStr = date=>{
+    const dateObj = new Date(date);
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
+    const year = dateObj.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       const api = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:4000';
-      const { data } = await axios.get(api + '/idsearch/' + id)
-      setArticle(data.article)
-      setAuthor(data.author)
+      const { data } = await axios.get(api + '/idsearch/' + id);
+      setArticle(data.article);
+      setAuthor(data.author);
     };
     fetchData();
     return () => {
-      setArticle('')
-      setAuthor('')
+      setArticle('');
+      setAuthor('');
     }
   }, [id]);
 
@@ -32,19 +38,20 @@ const One = () => {
   const avCss = "100px";
 
   const quote = article.title || '';
-  const uri = window.location.protocol + '//' + window.location.hostname + '/shareurl/6262b3e70954c9453b1c0b86';
+  const uri = window.location.protocol + '//' + window.location.hostname + '/shareurl/' + article._id;
   return (
-    <Paper className={`relative mb-[5%] ${isSm ? 'p-0' : 'p-12'}`}>
+    <Paper className='xl:p-0 px-40'>
       <article>
+      <img alt='poster' src={article.poster} className='max-h-[500px] m-auto'/>
         <div className='articleHead'>
           <Typography className='!text-3xl'>
             {article.title}
           </Typography>
-          {author && <span className="flex flex-row w-max h-min p-4">
+          {author && <span className="flex w-max h-min p-4">
             <Avatar src={author.avatar} alt={author.username} sx={{ width: avCss, height: avCss }} />
             <span className='ml-4 flex flex-col justify-center'>
-              <Typography className="author">{author && 'By: ' + author.username}</Typography>
-              <Typography className="date">{article && 'Date: ' + article.date}</Typography>
+              <p className="author break-all">{author && 'By: ' + author.username}</p>
+              <p className="date break-all" >{article && 'Date: ' + dateStr(article.date)}</p>
             </span>
           </span>}
         </div>

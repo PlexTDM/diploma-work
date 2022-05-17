@@ -28,7 +28,8 @@ const Modal = props => {
       text: data.message,
       icon: 'success',
       confirmButtonText: 'OK'
-    }).then(() => {
+    })
+    .then(() => {
       dispatch({ type: 'updateUser/clear' });
     })
   }, [data, dispatch])
@@ -56,7 +57,7 @@ const Modal = props => {
       avatar: avatar,
       role: role
     }
-    dispatch(updateUser(user._id, formData))
+    dispatch(updateUser({id:user._id, formData:formData}))
   }
 
   // TODO: faster data retrieving and fetching on click modal
